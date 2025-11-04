@@ -1,0 +1,82 @@
+# 这是一个 .gitignore 文件
+# 它会忽略你项目中所有不需要上传到 GitHub 的文件
+
+# 操作系统生成的文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 忽略 Visual Studio (C++) 项目文件
+#####################################
+# Visual Studio 解决方案和项目相关的临时文件
+*.suo
+*.user
+*.user.*
+*.sln.docstates
+
+# Visual Studio 解决方案和项目文件
+*.sln
+*.vcxproj
+*.vcxproj.filters
+
+
+# Visual Studio 自动生成的文件夹
+.vs/
+*_i.c
+*_p.c
+*dlldata.c
+
+# 编译输出文件夹
+[Bb]in/
+[Dd]ebug/
+[Rr]elease/
+x64/
+Win32/
+ipch/
+*.opensdf
+*.sdf
+
+# 编译产物
+*.exe
+*.dll
+*.obj
+*.pdb
+*.ilk
+*.lib
+*.pch
+*.tlog
+*.idb
+*.sbr
+*.bsc
+*.ncb
+*.stamp
+
+# 忽略 Java 项目文件
+#######################
+# 编译后的 .class 文件
+*.class
+
+# 日志文件
+*.log
+
+# 编译输出文件夹
+bin/
+build/
+target/
+
+# 包文件
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# IDE 配置文件 (Eclipse, IntelliJ, NetBeans)
+.settings/
+.project
+.classpath
+*.iml
+*.ipr
+*.iws
+.idea/
+nbproject/
