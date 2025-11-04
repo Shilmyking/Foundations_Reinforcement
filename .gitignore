@@ -18,7 +18,7 @@ desktop.ini
 *.sln
 *.vcxproj
 *.vcxproj.filters
-
+*.filters
 
 # Visual Studio 自动生成的文件夹
 .vs/
