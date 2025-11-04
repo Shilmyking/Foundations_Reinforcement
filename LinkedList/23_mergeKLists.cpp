@@ -77,6 +77,9 @@ class Solution {
         return head;
     }
 private:
+    // k最大为1e4(1W) 
+    // 每个链表长度不超过500
+    //所有链表节点总和不超过 1e4
     static const int MAXN = 1e4 + 5;
     ListNode* heap[MAXN];
     int heapSize = 0 ;
@@ -131,11 +134,6 @@ private:
         return heapSize == 0;
     }
 private:
-    // k最大为1e4(1W) 
-    // 每个链表长度不超过500
-    //所有链表节点总和不超过 1e4
-
-
     ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
         if (list1 == nullptr)return list2;
         if (list2 == nullptr) return list1;
