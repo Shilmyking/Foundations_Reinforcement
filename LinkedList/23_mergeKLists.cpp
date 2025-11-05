@@ -14,6 +14,10 @@ struct ListNode {
     //}//本地可以这样写  然后比较ListNode*  不对不对是比较了地址值的大小
 };
 
+// k最大为1e4(1W) 
+// 每个链表长度不超过500
+//所有链表节点总和不超过 1e4
+
 class Solution {
 
     //暴力
@@ -42,11 +46,48 @@ class Solution {
         ListNode* leftNode = f2(lists, left, mid);
         ListNode* rightNode = f2(lists, mid + 1, right);
 
-        head = mergeTwoLists(leftNode, rightNode);
-        return head;
+        return head = mergeTwoLists(leftNode, rightNode);
         //return mergeTwoLists(f2(lists, left, mid), f2(lists, mid + 1, right));
     }
 
+    //非递归 + queue
+private:
+    static const int queSize = 1e5 + 5;
+    ListNode* que[queSize];
+public:
+    ListNode* f2_1(const vector<ListNode*>& lists) {
+        if (lists.size() == 0)return nullptr;
+        int left = 0, right = 0;
+        for (ListNode* v : lists) {
+            if (v != nullptr) {
+                que[right++] = v;
+            }
+        }
+        while (left < right) {
+            ListNode* pre = que[left++];
+            ListNode* cur = que[left++];
+            que[right++] = mergeTwoLists(pre, cur);
+        }
+        //最后一个就是ans
+        return right != 0 ? que[right - 1] : nullptr;
+    }
+public:
+    ListNode* f2_2( vector<ListNode*>& lists) {
+        int n = lists.size();
+        if (n == 0) { return nullptr; }
+
+        //interval 步长
+        for (int interval = 1; interval < n; interval <<= 1) {
+
+            for (int i = 0; i + interval < n; i += (interval << 1)) {
+                lists[i] = mergeTwoLists(lists[i], lists[i + interval]);
+            }
+
+        }
+        return lists[0];
+    }
+
+public:
     ListNode* f3(const vector<ListNode*>& lists) {
         if (lists.size() == 0) { return nullptr; }
         build();
@@ -76,6 +117,7 @@ class Solution {
         }
         return head;
     }
+
 private:
     // k最大为1e4(1W) 
     // 每个链表长度不超过500
@@ -176,6 +218,7 @@ public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         //return f1(lists);
         //return f2(lists, 0, lists.size() - 1);
-        return f3(lists);
+        //return f3(lists);
+        return f2_2(lists);
     }
 };
