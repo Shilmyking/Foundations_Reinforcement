@@ -127,10 +127,10 @@ private:
     int heapSize = 0 ;
 
     //需要维持一个小根堆
-
     void build() {
         heapSize = 0;
     }
+
     //上浮操作
     void heapInsert(int i) {
         //如果当前节点
@@ -172,9 +172,11 @@ private:
         heapify(0);
         return ans;
     }
+
     bool isEmpty() {
         return heapSize == 0;
     }
+
 private:
     ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
         if (list1 == nullptr)return list2;
@@ -219,6 +221,7 @@ public:
         //return f1(lists);
         //return f2(lists, 0, lists.size() - 1);
         //return f3(lists);
+        //return f2_1(lists);
         return f2_2(lists);
     }
 };

@@ -59,13 +59,13 @@ public:
         //从小到大 依次串好
         if (list1->val < list2->val) {
             //递归
-            list1->next = mergeTwoLists(list1->next, list2);
+            list1->next = mergeTwoLists1(list1->next, list2);
 
             //回溯到当前调用递归的位置   返回ans
             return list1;
         }
 
-        list2->next = mergeTwoLists(list1, list2->next);
+        list2->next = mergeTwoLists1(list1, list2->next);
         return list2;
     }
 

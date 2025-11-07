@@ -51,6 +51,7 @@ class Solution {
         }
         return head;
     }
+
     ListNode* findMidNode(ListNode* list) {
         if (list == nullptr||list->next==nullptr)return list;
         ListNode* slow = list;
@@ -64,6 +65,7 @@ class Solution {
         //精准的返回中间的节点 
         return slow;//无论奇偶都是
     }
+
 public:
 
 
