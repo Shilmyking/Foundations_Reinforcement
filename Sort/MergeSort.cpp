@@ -16,7 +16,7 @@
 #include<set>
 #include<unordered_set>
 
-
+#if 0
 using namespace std;
 #define int long long 
 #define endl "\n"
@@ -86,15 +86,16 @@ void printNums() {
 	cout << endl;
 }
 
-//signed main() {
-//	ios_base::sync_with_stdio(false);
-//	cin.tie(nullptr);
-//	cout.tie(nullptr);
-//	cin >> n;
-//	for (int i = 0; i < n; i++) {
-//		cin >> nums[i];
-//	}
-//	//MergeSort(0, n - 1);
-//	MergeSort1();
-//	printNums();
-//}
+signed main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		cin >> nums[i];
+	}
+	//MergeSort(0, n - 1);
+	MergeSort1();
+	printNums();
+}
+#endif 
