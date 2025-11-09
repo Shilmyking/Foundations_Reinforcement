@@ -7,7 +7,7 @@ struct ListNode {
     ListNode(int x) : val(x), next(nullptr) {}
     ListNode(int x, ListNode* next) : val(x), next(next) {}
 };
-
+#if 0
 class Solution {
     //翻转链表
     ListNode* reverseList(ListNode* head) {
@@ -57,5 +57,63 @@ public:
             startNode = endNextNode;//下一次翻转的新head
         }
         return dummy->next;
+    }
+};
+#endif
+//不要使用 dummy
+
+class Solution {
+private:
+    // start--->  a-->b -->c -->d -->end -->endNext
+    // end---> d -->c --->b --->a --->start --> endNext
+    void reverse(ListNode* start, ListNode* end) {
+        ListNode* pre = nullptr;
+        ListNode* cur = start;
+        ListNode* next = cur->next;
+
+        end = end->next;// end变为边界  等效于那个nullptr
+        while (cur != end) {
+            next = cur->next;
+            cur->next = pre;
+
+            pre = cur;
+
+            cur = next;
+        }
+        //调整完之后 传参进来的end的节点的指向之前他原本的pre 
+        // start变为末尾节点  指向 end节点
+        start->next = end;
+    }
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        if (head == nullptr||head->next==nullptr) { return head; }
+        ListNode* start = head;
+        ListNode* end = findEnd(head, k);
+        if (end == nullptr) {
+            return head;
+        }
+        head = end;//真正的head
+        reverse(start, end);
+        ListNode* lastTeamEnd = start;//你是end 需要拿来接下一组的start
+        //这里start已经再reverse函数接上 原本end的下一个节点了
+        while (lastTeamEnd->next != nullptr) {
+            start = lastTeamEnd->next;//下一组的start
+            end = findEnd(start, k);
+            if (end == nullptr) {//不够k个 无需继续翻转了
+                return head;
+            }
+            reverse(start, end);
+            lastTeamEnd->next = end;
+            lastTeamEnd = start;
+        }
+        return head;
+    }
+
+    //包括当前节点head在内，往后找k个节点  可能返回nullptr  代表不够 那就不用翻转了
+    ListNode* findEnd(ListNode*head,int k) {
+        while (--k != 0 && head != nullptr) {
+            head = head->next;
+        }
+        return head;
     }
 };
