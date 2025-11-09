@@ -72,17 +72,17 @@ public:
         return right != 0 ? que[right - 1] : nullptr;
     }
 public:
-    ListNode* f2_2( vector<ListNode*>& lists) {
+    ListNode* f2_2(vector<ListNode*>& lists) {
         int n = lists.size();
         if (n == 0) { return nullptr; }
 
         //interval 步长
         for (int interval = 1; interval < n; interval <<= 1) {
-
-            for (int i = 0; i + interval < n; i += (interval << 1)) {
+            int i = 0;
+            while (i + interval < n) {
                 lists[i] = mergeTwoLists(lists[i], lists[i + interval]);
+                i += (interval << 1);
             }
-
         }
         return lists[0];
     }
