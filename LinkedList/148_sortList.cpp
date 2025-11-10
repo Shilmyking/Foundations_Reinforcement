@@ -53,7 +53,7 @@ class Solution {
     }
 
     ListNode* findMidNode(ListNode* list) {
-        if (list == nullptr||list->next==nullptr)return list;
+        if (list == nullptr || list->next == nullptr)return list;
         ListNode* slow = list;
         ListNode* fast = list;
 
@@ -68,12 +68,11 @@ class Solution {
 
 public:
 
-
     //需要 nlogn的时间复杂度
     //归并排序  快排
     ListNode* sortList(ListNode* head) {
         // nullptr or 一个节点
-        if (head == nullptr||head->next==nullptr)return head;
+        if (head == nullptr || head->next == nullptr)return head;
         ListNode* midNode = findMidNode(head);
         ListNode* rightBeginNode = midNode->next;
         midNode->next = nullptr;
@@ -104,14 +103,13 @@ public:
         ListNode* left2; ListNode* right2;
         ListNode* next; ListNode* lastTeamEnd;
 
-        for (int step = 1; step < n; step <<= 1) {
+        for (int step = 1; step < n; step <<= 1) {//step*=2
             //每一次枚举的step 第一次merge必须要特殊处理  -->确认新head
             //找好节点边界
             left1 = head;
             right1 = findEnd(left1, step);//找到末尾的节点
 
             //两个节点的时候也正常合并 代码没问题  这里就是无需再处理边界问题了
-
             left2 = right1->next;
             right2 = findEnd(left2, step);
             //准备合并
@@ -184,7 +182,7 @@ private:
             end = right2;
         }
     }
-
+    //step
     //包括s在内往后数K个节点 返回  如果不够返回最后一个非空节点
     ListNode* findEnd(ListNode* head, int k) {
         while (--k != 0 && head->next != nullptr) {

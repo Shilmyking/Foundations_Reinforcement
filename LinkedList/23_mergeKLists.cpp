@@ -17,7 +17,6 @@ struct ListNode {
 // k最大为1e4(1W) 
 // 每个链表长度不超过500
 //所有链表节点总和不超过 1e4
-
 class Solution {
 
     //暴力
@@ -35,6 +34,9 @@ class Solution {
 
     ListNode* f2(const vector<ListNode*>& lists, int left, int right) {
         if (left > right) {
+            //这句甚至不用  不存在这种可能  
+            // 递归调用的的隐含条件是left <= right left==right才会出现left > right
+            // 当left == right 时直接return 不调用递归了
             return nullptr;
         }
         if (left == right) {
@@ -47,12 +49,14 @@ class Solution {
         ListNode* rightNode = f2(lists, mid + 1, right);
 
         return head = mergeTwoLists(leftNode, rightNode);
+        
         //return mergeTwoLists(f2(lists, left, mid), f2(lists, mid + 1, right));
     }
 
     //非递归 + queue
 private:
     static const int queSize = 1e5 + 5;
+    //大小 设置为两倍 lists.size()多一点 足够了  二叉树最底层和上面所有节点间的关系可以推断出
     ListNode* que[queSize];
 public:
     ListNode* f2_1(const vector<ListNode*>& lists) {
@@ -63,6 +67,7 @@ public:
                 que[right++] = v;
             }
         }
+
         while (left < right) {
             ListNode* pre = que[left++];
             ListNode* cur = que[left++];
@@ -76,12 +81,13 @@ public:
         int n = lists.size();
         if (n == 0) { return nullptr; }
 
-        //interval 步长
-        for (int interval = 1; interval < n; interval <<= 1) {
+        //step 步长
+        for (int step = 1; step < n; step <<= 1) {
             int i = 0;
-            while (i + interval < n) {
-                lists[i] = mergeTwoLists(lists[i], lists[i + interval]);
-                i += (interval << 1);
+            while (i + step < n) {
+                // i 位置 和 i+step 位置 merge
+                lists[i] = mergeTwoLists(lists[i], lists[i + step]);
+                i += (step << 1);
             }
         }
         return lists[0];
@@ -155,13 +161,14 @@ private:
             left = 2 * i + 1;
         }
     }
-
+    // 如果push Or pop  一般是栈帧
+    // Insert
     void push(ListNode* node) {
         //heapSize 指向要加入的位置
         heap[heapSize] = node;
         heapInsert(heapSize++);//维持小根堆
     }
-
+    //
     ListNode* pop() {
         if (heapSize == 0) {
             return nullptr;
