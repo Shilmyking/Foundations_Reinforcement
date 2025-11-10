@@ -20,7 +20,7 @@ struct ListNode {
 class Solution {
 
     //暴力
-    ListNode* f1(const vector<ListNode*>&lists) {
+    ListNode* f1(const vector<ListNode*>& lists) {
         int n = lists.size();
         if (n == 0)return nullptr;
         ListNode* cur = lists[0];
@@ -49,7 +49,7 @@ class Solution {
         ListNode* rightNode = f2(lists, mid + 1, right);
 
         return head = mergeTwoLists(leftNode, rightNode);
-        
+
         //return mergeTwoLists(f2(lists, left, mid), f2(lists, mid + 1, right));
     }
 
@@ -98,28 +98,28 @@ public:
         if (lists.size() == 0) { return nullptr; }
         build();
         int n = lists.size();
-        for (ListNode*v:lists) {
-            if (v != nullptr){
+        for (ListNode* v : lists) {
+            if (v != nullptr) {
                 push(v);
             }
-        }       
+        }
         if (isEmpty()) {//存在 lists就是 []的情况
             return nullptr;
         }
         ListNode* head = pop();//拿堆顶
         //只要pop了 就需要 把堆顶的下一个元素放进小根堆
         ListNode* pre = head;
-        if (pre!=nullptr&&pre->next != nullptr) {
+        if (pre != nullptr && pre->next != nullptr) {
             push(pre->next);
         }
         ListNode* cur;
         while (!isEmpty()) {
-             cur = pop();
-             pre->next = cur;
-             pre = pre->next;//去下一个位置继续串
-             if (cur->next != nullptr) {
-                 push(cur->next);
-             }
+            cur = pop();
+            pre->next = cur;
+            pre = pre->next;//去下一个位置继续串
+            if (cur->next != nullptr) {
+                push(cur->next);
+            }
         }
         return head;
     }
@@ -130,7 +130,7 @@ private:
     //所有链表节点总和不超过 1e4
     static const int MAXN = 1e4 + 5;
     ListNode* heap[MAXN];
-    int heapSize = 0 ;
+    int heapSize = 0;
 
     //需要维持一个小根堆
     void build() {
