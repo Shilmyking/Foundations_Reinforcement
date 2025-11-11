@@ -9,29 +9,42 @@ void pop() 删除堆栈顶部的元素。
 int top() 获取堆栈顶部的元素。
 int getMin() 获取堆栈中的最小元素。
 */
+#include<iostream>
+
+#include<string>
+using namespace std;
 class MinStack {
+private:
+    static const int N = 3e4 + 5;
+    int Stack[N];
+    int Min[N];
+    int stackSize;
+    int minSize;
 public:
     // O(1)拿到栈内的最小值
-    MinStack() {
-
+    MinStack() :stackSize(0), minSize(0) {
+        memset(Stack, 0, sizeof(Stack));
+        memset(Min, 0, sizeof(Min));
     }
     ~MinStack() {
 
     }
     void push(int val) {
-
+        Stack[stackSize++] = val;
+        Min[minSize++] = minSize >= 1 && val > Min[minSize - 1] ? Min[minSize - 1] : val;
     }
 
     void pop() {
-
+        stackSize--;
+        minSize--;
     }
 
     int top() {
-
+        return Stack[stackSize - 1];
     }
 
     int getMin() {
-
+        return Min[stackSize - 1];
     }
 };
 
