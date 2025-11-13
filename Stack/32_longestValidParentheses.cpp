@@ -2,6 +2,7 @@
 #include<string>
 using namespace std;
 
+#if 0
 class Solution {
     static const int N = 3e4 + 2;
     int dp[N];
@@ -34,3 +35,4 @@ public:
     }
 };
 
+#endif

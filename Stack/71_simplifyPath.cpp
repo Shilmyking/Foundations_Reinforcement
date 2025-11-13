@@ -4,7 +4,7 @@ using namespace std;
 
 //https://leetcode.cn/problems/simplify-path
 
-
+#if 0
 class Solution {
 public:
     static const int N = 3e3 + 5;
@@ -64,7 +64,7 @@ public:
         return ans != "" ? ans : "/";
     }
 };
-
+#endif
 #if 0
 istringstream 类 
 getline 分割字符

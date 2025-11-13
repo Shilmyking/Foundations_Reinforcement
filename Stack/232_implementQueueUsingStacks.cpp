@@ -3,6 +3,7 @@
 //如果要倒数据  in必须清空倒完
 //满足上述条件 其实就是控制  queue的出顺序不乱
 
+#if 0
 class MyQueue {
 private:
     int* in;
@@ -58,3 +59,4 @@ public:
  * int param_3 = obj->peek();
  * bool param_4 = obj->empty();
  */
+#endif

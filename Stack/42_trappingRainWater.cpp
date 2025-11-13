@@ -4,7 +4,7 @@
 
 using namespace std;
 
-
+#if 0
 class Solution {
     static const int N = 2e4 + 5;
     const int INF = 0x3f3f3f3f;
@@ -55,3 +55,4 @@ public:
         }
     }
 };
+#endif

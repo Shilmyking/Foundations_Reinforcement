@@ -10,6 +10,7 @@
 #include<vector>
 
 using namespace std;
+#if 0
 class Solution {
     static const int N = 1e5 + 5;
     int Stack[N];
@@ -52,3 +53,5 @@ public:
         return Max;
     }
 };
+
+#endif

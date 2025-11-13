@@ -14,6 +14,7 @@ s 表示一个有效的表达式
 */
 
 //"(1+(4+5+2)-3)+(6+8)"
+#if 0
 class Solution {
     static const int N = 2e5;
     int Stack[N];
@@ -85,3 +86,5 @@ public:
         return Stack[0];
     }
 };
+
+#endif

@@ -11,6 +11,7 @@ struct ListNode {
     //    return this->val < node->val;
     //}//本地可以这样写  然后比较ListNode*  不对不对是比较了地址值的大小
 };
+#if 0
 
 class Solution {
     ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
@@ -192,3 +193,4 @@ private:
     }
 };
 
+#endif
