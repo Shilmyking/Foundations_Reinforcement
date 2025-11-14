@@ -13,18 +13,18 @@
 public class Code01_BasicCalculatorIII {
 
 	public static int calculate(String str) {
-		where = 0;
+		Where = 0;
 		return f(str.toCharArray(), 0);
 	}
 
 	//记录当前处理到的地方
-	public static int where;
+	public static int Where;
 
 	//每个递归函数如果存在自己的"("的话 一定会遇到自己的")"
 
 	// s[i....]开始计算，遇到字符串终止 或者 遇到)停止
 	// 返回 : 自己负责的这一段，计算的结果
-	// 返回之间，更新全局变量where，为了上游函数知道从哪继续！
+	// 返回之间，更新全局变量Where，为了上游函数知道从哪继续！
 	public static int f(char[] s, int i) {
 		int cur = 0;
 		ArrayList<Integer> numbers = new ArrayList<>();//数字栈
@@ -46,15 +46,15 @@ public class Code01_BasicCalculatorIII {
 				// 遇到了左括号！
 				cur = f(s, i + 1);
 
-				//子过程做完之后 同步更新了where  我们这里接着子过程继续操作
-				i = where + 1;
+				//子过程做完之后 同步更新了Where  我们这里接着子过程继续操作
+				i = Where + 1;
 			}
 		}
 		//1 + 1
 		//最后遇到终止符or遇到)   需要把那个数字放进去   
 		//这里面使用的 数组存储这些内容
 		push(numbers, ops, cur, '+');
-		where = i;
+		Where = i;
 		return compute(numbers, ops);
 	}
 
