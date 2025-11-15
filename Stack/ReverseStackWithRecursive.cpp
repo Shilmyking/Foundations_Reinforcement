@@ -15,7 +15,7 @@
 
 using namespace std;
 
-
+#if 0
 //递归函数逆序一个栈
 #define int long long
 #define endl "\n"
@@ -69,3 +69,4 @@ signed main() {
 	}
 	cout << endl;
 }
+#endif
