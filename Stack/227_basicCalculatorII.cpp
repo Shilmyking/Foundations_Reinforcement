@@ -15,7 +15,7 @@
 
 
 using namespace std;
-
+#if 0
 class Solution {
     static const int N = 2e5 + 2;
     int nums[N];
@@ -73,7 +73,7 @@ public:
 
 
 
-
+#endif
 
 
 

@@ -1,7 +1,7 @@
 ﻿#include<vector>
 #include<string>
 using namespace std;
-
+#if 0
 
 class Solution {
 //using ll = long long;
@@ -41,7 +41,7 @@ public:
     }
 };
 
-
+#endif
 /*
 
 

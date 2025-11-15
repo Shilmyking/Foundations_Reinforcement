@@ -2,7 +2,7 @@
 #include<iostream>
 
 using namespace std;
-
+#if 0
 const int N = 1e5 + 4;
 int Stack[N];
 int Size = 0;//始终指向需要加入元素的位置
@@ -30,3 +30,4 @@ int top() {
 int size() {
 	return Size;
 }
+#endif

@@ -12,6 +12,8 @@ int getMin() 获取堆栈中的最小元素。
 #include<iostream>
 
 #include<string>
+
+#if 0
 using namespace std;
 class MinStack {
 private:
@@ -56,3 +58,5 @@ public:
  * int param_3 = obj->top();
  * int param_4 = obj->getMin();
  */
+
+#endif

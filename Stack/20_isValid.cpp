@@ -1,7 +1,7 @@
 ﻿
 #include<string>
 using namespace std;
-
+#if 0
 class Solution {
     static const int N = 1e4 + 3;
     char Stack[N];
@@ -27,3 +27,4 @@ public:
         return Size != 0 ? false : true;
     }
 };
+#endif

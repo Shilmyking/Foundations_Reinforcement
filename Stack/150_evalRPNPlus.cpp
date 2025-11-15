@@ -9,7 +9,7 @@
 #include<ctime>     // 引入 time
 
 using namespace std;
-
+#if 0
 #define int long long
 #define endl "\n"
 
@@ -101,3 +101,4 @@ int evalRPN() {
 }
 //逆波兰表达式
 
+#endif
