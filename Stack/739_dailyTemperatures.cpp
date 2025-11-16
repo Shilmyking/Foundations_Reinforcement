@@ -11,6 +11,7 @@
 #include<stack>
 
 using namespace std;
+#if 0
 class Solution {
     static const int MAXN = 1e5 + 4;
     int Stack[MAXN];
@@ -37,3 +38,4 @@ public:
         return ans;
     }
 };
+#endif 

@@ -176,9 +176,9 @@ signed main() {
         s = expr_str;
         n = s.length();
 
-            int result = evalRPN();
-            cout << "Input:  \"" << s << "\"" << endl;
-            cout << "Result: " << result << endl;
+        int result = evalRPN();
+        cout << "Input:  \"" << s << "\"" << endl;
+        cout << "Result: " << result << endl;
 
     }
     return 0;
