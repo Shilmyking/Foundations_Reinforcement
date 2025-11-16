@@ -12,120 +12,73 @@ using namespace std;
 class Solution {
 public:
     // "(2*(3-4))*5"  -->10
-	static const int N = 1e4+5;
-	int nums[N];
-	int Size = 0;
-	char ops[N];
-	int opSize = 0;
-
+	static const int N = 1e2 + 2;
 	int Where = 0;//标识当前递归函数处理到了哪个位置
 	
-	//递归函数
+	// 递归函数
 	// 计算当前 ()内的所有值  or 完全没有遇到()  计算完了
 	// 计算完递归函数返回前 更新Where数组 标识当前计算式运算到什么地方
-	int f() {
-
-	}
-
-	//只会传入 + or -  如果遇到 * or / 那你在直接弹出
-	int compute() {
-
-	}
-
-    int solve(string s) {
-    
-		int n = s.size();
-		for (int i = 0; i < n; i++) {
-
-		}
-
-    }
-};
-
-
-#if 0
-public class Code01_BasicCalculatorIII {
-
-	public static int calculate(String str) {
-		Where = 0;
-		return f(str.toCharArray(), 0);
-	}
-
-	//记录当前处理到的地方
-	public static int Where;
-
-	//每个递归函数如果存在自己的"("的话 一定会遇到自己的")"
-
-	// s[i....]开始计算，遇到字符串终止 或者 遇到)停止
-	// 返回 : 自己负责的这一段，计算的结果
-	// 返回之间，更新全局变量Where，为了上游函数知道从哪继续！
-	public static int f(char[] s, int i) {
-		int cur = 0;
-		ArrayList<Integer> numbers = new ArrayList<>();//数字栈
-		ArrayList<Character> ops = new ArrayList<>();//符号栈
-		//只要没有遇到右括号和到达末尾
-		while (i < s.length && s[i] != ')') {
-
+	// 从i位置开始往后计算
+	int f(const string&s,int i) {
+		//每一个递归函数使用自己的 nums ops
+		//这里用 vector 用静态数组  否则还要传入 n大小 参数多一位  挺烦
+		int now = 0, n = s.size();
+		vector<int> nums;
+		vector<char> ops;
+		
+		while (i < n && s[i] != ')') {
+			if (s[i] == ' ') {
+				i++;
+				continue;
+			}
+			// 计算now
 			if (s[i] >= '0' && s[i] <= '9') {
-				cur = cur * 10 + s[i++] - '0';//如果是数字 继续增加
+				now = now * 10 + (s[i++] - '0');
 			}
+			//如果 不是（ or ）  是 + - * / 运算符
 			else if (s[i] != '(') {
-				// 遇到了运算符 + - * /
-				push(numbers, ops, cur, s[i++]);
-				cur = 0;//刷新 置零
-
+				push(nums, ops, now, s[i++]);
+				now = 0;
 			}
 			else {
-				// i (.....)
-				// 遇到了左括号！
-				cur = f(s, i + 1);
-
-				//子过程做完之后 同步更新了Where  我们这里接着子过程继续操作
-				i = Where + 1;
+				now = f(s, i + 1);//遇到左括号 -->调用递归 计算出里面的值
+				i = Where + 1;//接续递归计算下一位
 			}
 		}
-		//1 + 1
-		//最后遇到终止符or遇到)   需要把那个数字放进去   
-		//这里面使用的 数组存储这些内容
-		push(numbers, ops, cur, '+');
+
+		push(nums, ops, now, '+');
 		Where = i;
-		return compute(numbers, ops);
+		return compute(nums, ops);
 	}
 
-	//遇到符号  那就需要压栈了
-	public static void push(ArrayList<Integer> numbers, ArrayList<Character> ops, int cur, char op) {
-		int n = numbers.size();
-		if (n == 0 || ops.get(n - 1) == '+' || ops.get(n - 1) == '-') {
-			//数字栈啥也没有  符号栈栈顶不为 "*" or "/"
-			numbers.add(cur);
-			ops.add(op);
+	void push(vector<int>& nums, vector<char>& ops, int now, char op) {
+		int n = nums.size();
+		//栈顶为空直接入栈  如果符号栈栈顶是* or / 需要计算完才能
+		if (n == 0 || ops[n - 1] == '+' || ops[n - 1] == '-') {
+			nums.emplace_back(now);
+			ops.emplace_back(op);
 		}
-		else {//乘或除 计算完放栈内
-			//拿出符号栈和数字栈的栈顶
-			int topNumber = numbers.get(n - 1);
-			char topOp = ops.get(n - 1);
-			//更新数字栈栈顶元素
-			if (topOp == '*') {
-				numbers.set(n - 1, topNumber * cur);
-			}
-			else {
-				numbers.set(n - 1, topNumber / cur);
-			}
-			//op为符号栈栈顶？？
-			ops.set(n - 1, op);
+		else {
+			int topNum = nums[n - 1];
+			char topOp = ops[n - 1];
+			// 计算 * or / 然后push
+			nums[n - 1] = topOp == '*' ? topNum * now : topNum / now;
+			ops[n - 1] = op;
 		}
 	}
-
-	public static int compute(ArrayList<Integer> numbers, ArrayList<Character> ops) {
-		int n = numbers.size();
-		int ans = numbers.get(0);
+	//只会传入 + or -  如果遇到 * or / 那你在直接弹出
+	int compute(vector<int>&nums,vector<char>&ops) {
+		int n = nums.size();
+		int ans = nums[0];
 		for (int i = 1; i < n; i++) {
-			//只会遇到 +  和  -
-			ans += ops.get(i - 1) == '+' ? numbers.get(i) : -numbers.get(i);
+			ans += ops[i - 1] == '+' ? nums[i] : -nums[i];
 		}
 		return ans;
 	}
 
-}
+    int solve(string s) {
+		Where = 0;
+		return f(s, 0);
+    }
+};
 
-#endif

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-#if 0
+
 class Solution {
 private:
     static const int N = 2e4 + 5;
@@ -31,7 +31,7 @@ public:
         //最左和最右 认为收集不到  边界无穷低
         for (int i = 1; i < n - 1; i++) {
             //取小
-            ans += std::min(Left[i] - height[i], Right[i] - height[i]);
+            ans += std::min(Left[i], Right[i]) - height[i];
         }
         return ans;
     }
@@ -63,22 +63,36 @@ private:
         return ans;
     }
 
-    //根据上面的辅助数组解法，优化掉 造成O(N)空间复杂度的数组
-    //为什么能优化掉：左右两侧分别求解Max的过程中， Max只依赖于上一次求解的一项/当前位置的height[i]
+    // 根据上面的辅助数组解法，优化掉 造成O(N)空间复杂度的数组
+    // 为什么能优化掉：左右两侧分别求解Max的过程中， Max只依赖于上一次求解的一项/当前位置的height[i]
     // 而且只需要保存整个过程出现的最大值即可  无需整个数组
 
     //得到最大值 当前位置的水量如何计算呢？？ 
     // leftMax和rightMax的关系无非三种情况  leftMax > rightMax  leftMax == rightMax  leftMax < rightMax
-    //相等的话 左右两侧谁先更新无所谓   
-    // leftMax大的话  先更新right
+    // 相等的话 左右两侧谁先更新无所谓   
+    // leftMax>rightMax  先更新left
+    // rightMax<leftMax  先更新right
     int trap3(vector<int>& height) {
         int n = height.size();
         int leftMax = height[0], rightMax = height[n - 1];
         int left = 1, right = n - 2;
-        while (left < right) {
-
+        int ans = 0;
+        //相等的时候停止
+        while (left <= right) {
+            leftMax = std::max(leftMax, height[left]);
+            rightMax = std::max(rightMax, height[right]);
+            // 左侧小 左侧结算
+            // 因为右侧的rightMax只可能更大 不可能小  
+            // 小贪心/范围大--->rightMax只可能大  范围单调性
+            if (leftMax < rightMax) {
+                ans += std::max(0, leftMax - height[left++]);
+            }
+            //相等 同时结算也ok
+            else if (leftMax >= rightMax) {
+                ans += std::max(0, rightMax - height[right--]);
+            }
         }
+        return ans;
     }
 };
 
-#endif

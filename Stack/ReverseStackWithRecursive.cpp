@@ -20,7 +20,7 @@ using namespace std;
 #define int long long
 #define endl "\n"
 
-const int N = 1e6+5;
+const int N = 1e5+5;
 int Stack[N];
 int Size = 0;
 
