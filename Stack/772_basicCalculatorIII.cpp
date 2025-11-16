@@ -45,7 +45,7 @@ public:
 				i = Where + 1;//接续递归计算下一位
 			}
 		}
-
+		//最后循环退出 now可能还未压栈  也放入进去
 		push(nums, ops, now, '+');
 		Where = i;
 		return compute(nums, ops);
@@ -53,7 +53,8 @@ public:
 
 	void push(vector<int>& nums, vector<char>& ops, int now, char op) {
 		int n = nums.size();
-		//栈顶为空直接入栈  如果符号栈栈顶是* or / 需要计算完才能
+		// 栈顶为空直接入栈  如果符号栈栈顶是* or / 需要计算完才能
+		// 遇到 -5 这种问题 也能解决
 		if (n == 0 || ops[n - 1] == '+' || ops[n - 1] == '-') {
 			nums.emplace_back(now);
 			ops.emplace_back(op);
