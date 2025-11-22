@@ -4,15 +4,14 @@
 
 using namespace std;
 
-
-    struct TreeNode {
-        int val;
-        TreeNode* left;
-        TreeNode* right;
-        TreeNode() : val(0), left(nullptr), right(nullptr) {}
-        TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-        TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
-    };
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
+};
 
 
 class Solution {
@@ -46,3 +45,35 @@ public:
         return nums;
     }
 };
+
+char cnt = 'a';
+
+void dfs(TreeNode* root) {
+    if (root == nullptr) {
+        cout << cnt++ << endl;
+        return;
+    }
+
+    cout << "pre:" << root->val << endl;
+    dfs(root->left);
+    cout << "in:" << root->val << endl;
+    dfs(root->right);
+    cout << "post:" << root->val << endl;
+
+}
+
+signed main() {
+  
+
+    TreeNode* llt = new TreeNode(4);
+    TreeNode* lrt = new TreeNode(5);
+    TreeNode* lt = new TreeNode(2, llt, lrt);
+
+    TreeNode* rlt = new TreeNode(6);
+    TreeNode* rrt = new TreeNode(7);
+    TreeNode* rt = new TreeNode(3,rlt,rrt);
+
+    TreeNode* root = new TreeNode(1, lt, rt);
+
+    dfs(root);
+}
