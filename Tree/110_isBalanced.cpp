@@ -16,14 +16,22 @@ struct TreeNode {
 
 
 class Solution {
-    int deep(TreeNode* root) {
-        return (root != nullptr ? 1 + std::max(deep(root->left), deep(root->right)) : 0);
+    int height(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        }
+        int Left = height(root->left);
+        int Right = height(root->right);
+
+        return std::max(Left, Right) + 1;
     }
     bool balance(TreeNode* root) {
         if (root == nullptr) { return true; }
-        int Left = deep(root->left);
-        int Right = deep(root->right);
-        return std::abs(Left - Right) <= 1;
+        int Left = height(root->left);
+        int Right = height(root->right);
+        return std::abs(Left - Right) <= 1 && 
+            isBalanced(root->left)&&
+            isBalanced(root->right);
     }
 public:
     bool isBalanced(TreeNode* root) {
