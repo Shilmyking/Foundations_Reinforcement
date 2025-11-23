@@ -30,7 +30,9 @@ class Solution {
         if (root == nullptr) { return subRoot == nullptr; }
         //root不nullptr
         if (subRoot == nullptr) { return false; }
-
+        if (root == nullptr || subRoot == nullptr) {
+            return root == subRoot;
+        }
         //都不为nullptr
         bool lt = checkIsSame(root->left, subRoot->left);
         bool rt = checkIsSame(root->right, subRoot->right);
