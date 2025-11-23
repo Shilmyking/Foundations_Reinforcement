@@ -12,7 +12,9 @@ struct TreeNode {
 };
 
 class Solution {
-    using ll = long long;
+    using ll = long long;//8
+    // INT_MAX  
+    
     const ll INF = 0x3f3f3f3f3f3f3f3f;
     static const int MAXN = 1e4 + 5;
 public:
@@ -27,8 +29,11 @@ public:
         if (!(MIN < node->val && node->val < MAX)) {
             return false;
         }
+
         bool Left = dfs(node->left, MIN, node->val);
+
         bool Right = dfs(node->right, node->val, MAX);
+
         return Left && Right;
     }
 
@@ -103,10 +108,12 @@ public:
             return new Node(true, -INF, INF);
         }
         Node* lt = f1(head->left);
+        
         Node* rt = f1(head->right);
+
         ll Max = std::max({ lt->Max,rt->Max,(ll)head->val });
         ll Min = std::min({ lt->Min,rt->Min,(ll)head->val });
-
+        
         return new Node(lt->isVaild && rt->isVaild && 
             ((head->val > lt->Max) && (head->val < rt->Min)), 
             Max, Min);

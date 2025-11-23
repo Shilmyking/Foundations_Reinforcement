@@ -27,9 +27,6 @@ class Solution {
         //root为nullptr subroot为nullptr  true
         //      nullptr         不为nullptr  false
         //     不为nullptr       为nullptr  false
-        if (root == nullptr) { return subRoot == nullptr; }
-        //root不nullptr
-        if (subRoot == nullptr) { return false; }
         if (root == nullptr || subRoot == nullptr) {
             return root == subRoot;
         }
@@ -39,6 +36,7 @@ class Solution {
         bool cur = root->val == subRoot->val;
         return lt && rt && cur;
     }
+
     //当前为head的子树是否能配对出..
     bool isSame(TreeNode* root, TreeNode* subRoot) {
         if (checkIsSame(root, subRoot)) {
@@ -66,7 +64,6 @@ public:
     }
 
     //序列化
-
     bool isSubtree2(TreeNode* root, TreeNode* subRoot) {
         preSeries(root);
         preSeries1(subRoot);
@@ -102,6 +99,7 @@ public:
             preSeries1(root->right);
         }
     }
+
     void getNext() {
         nexts[0] = -1;
         nexts[1] = 0;
@@ -118,6 +116,7 @@ public:
             }
         }
     }
+
     int KMP2() {
         int i = 0, j = 0;
         while (i < Size && j < subSize) {

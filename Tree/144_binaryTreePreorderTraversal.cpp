@@ -46,7 +46,7 @@ public:
     }
 };
 
-#if 0
+
 char cnt = 'a';
 
 void dfs(TreeNode* root) {
@@ -77,5 +77,7 @@ signed main() {
     TreeNode* root = new TreeNode(1, lt, rt);
 
     dfs(root);
+    cout << sizeof(long long);
+
+    cout << sizeof(long);
 }
-#endif

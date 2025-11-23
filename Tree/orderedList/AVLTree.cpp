@@ -9,6 +9,7 @@
 // 所有操作的次数 <= 10^5
 // -10^7 <= x <= +10^7
 // 测试链接 : https://www.luogu.com.cn/problem/P3369
+
 #if 0
 
 #include<iostream>
@@ -27,8 +28,8 @@ int head = 0;
 int cnt = 0;
 int key[MAXN];//键值
 int height[MAXN];//高度
-int lt[MAXN];//左孩子
-int rt[MAXN];//右孩子
+int ls[MAXN];//左孩子
+int rs[MAXN];//右孩子
 
 int Count[MAXN];//词频
 int sz[MAXN];//这颗子树下节点的个数
@@ -37,16 +38,16 @@ int n;
 
 //当前节点 汇总孩子的信息 更新 height sz
 void up(int i) {
-	sz[i] = sz[lt[i]] + sz[rt[i]] + Count[i];
-	height[i] = std::max(height[lt[i]], height[rt[i]]) + 1;
+	sz[i] = sz[ls[i]] + sz[rs[i]] + Count[i];
+	height[i] = std::max(height[ls[i]], height[rs[i]]) + 1;
 }
 
 //以i为head的节点 左旋
 int leftRoate(int i) {
-	int r = rt[i];
+	int r = rs[i];
 
-	rt[i] = lt[r];
-	lt[r] = i;
+	rs[i] = ls[r];
+	ls[r] = i;
 
 	up(i);
 	up(r);
@@ -55,10 +56,10 @@ int leftRoate(int i) {
 
 //以i为head的节点 右旋
 int rightRoate(int i) {
-	int l = lt[i];//左孩子
+	int l = ls[i];//左孩子
 
-	lt[i] = rt[l];// 父节点的左孩子 变为 左孩子的右孩子
-	rt[l] = i;//左孩子的右孩子变为 i节点
+	ls[i] = rs[l];// 父节点的左孩子 变为 左孩子的右孩子
+	rs[l] = i;//左孩子的右孩子变为 i节点
 
 	up(i);//先汇总这个孩子
 	up(l);//再汇总 新head
@@ -67,25 +68,25 @@ int rightRoate(int i) {
 
 // 负责旋转 信息正确更新 同时 维持平衡
 int maintain(int i) {
-	int hl = height[lt[i]], hr = height[rt[i]];
+	int hl = height[ls[i]], hr = height[rs[i]];
 	if (hl - hr > 1) {
-		int l = lt[i];
+		int l = ls[i];
 		// LL
-		if (height[lt[l]] >= height[rt[l]]) {
+		if (height[ls[l]] >= height[rs[l]]) {
 			i = rightRoate(i);
 		}
 		else {//LR
-			lt[i] = leftRoate(lt[i]);
+			ls[i] = leftRoate(ls[i]);
 			i = rightRoate(i);
 		}
 	}
 	else if (hr - hl > 1) {
-		int r = rt[i];
-		if (height[rt[r]] >= height[lt[r]]) {
+		int r = rs[i];
+		if (height[rs[r]] >= height[ls[r]]) {
 			i = leftRoate(i);
 		}
 		else {
-			rt[i] = rightRoate(rt[i]);
+			rs[i] = rightRoate(rs[i]);
 			i = leftRoate(i);
 		}
 	}
@@ -109,10 +110,10 @@ int add(int i, int num) {
 	}
 	else if (key[i] > num) {
 		//存在换head的可能性
-		lt[i] = add(lt[i], num);
+		ls[i] = add(ls[i], num);
 	}
 	else if (key[i] < num) {
-		 rt[i] = add(rt[i], num);
+		 rs[i] = add(rs[i], num);
 	}
 	// 回溯回来了
 	up(i);//汇总当前节点的信息
@@ -131,10 +132,10 @@ int getRank(int i, int num) {
 	if (i == 0) { return 0;}
 	if (key[i] >= num) {// > 直接去左侧
 		// 因为是要收集小于当前num的总节点个数
-		return getRank(lt[i], num);
+		return getRank(ls[i], num);
 	}
 	else {//当前 key[i] < num  --->  说明当前位置也囊括 左树也囊括
-		return sz[lt[i]] + Count[i] + getRank(rt[i], num);
+		return sz[ls[i]] + Count[i] + getRank(rs[i], num);
 	}
 }
 
@@ -149,11 +150,11 @@ int getRank(int num) {
 int removeMostLeft(int i, int mostLeft) {
 	if (i == mostLeft) {
 		//找到后继节点 ，删除
-		return rt[i];// 返回后继的right 节点(替代后继节点的位置，找不到了，等效于删除)
+		return rs[i];// 返回后继的right 节点(替代后继节点的位置，找不到了，等效于删除)
 	}
 	else {
 		//继续往左树走   直到找到 mostLeft 然后返回回来
-		lt[i] = removeMostLeft(lt[i], mostLeft);
+		ls[i] = removeMostLeft(ls[i], mostLeft);
 		//返回回来了 汇总子节点信息  然后maintain
 		up(i);
 		return maintain(i);//调整好的head   
@@ -163,38 +164,38 @@ int removeMostLeft(int i, int mostLeft) {
 // 删除节点
 int remove(int i, int num) {
 	if (key[i] > num) {
-		lt[i] = remove(lt[i], num);
+		ls[i] = remove(ls[i], num);
 	}
 	else if (key[i] < num) {
-		rt[i] = remove(rt[i], num);
+		rs[i] = remove(rs[i], num);
 	}
 	else if (key[i] == num) {
 		if (Count[i] > 1) {
 			Count[i]--;
 		}
 		else {
-			if (lt[i] == 0 && rt[i] == 0) {
+			if (ls[i] == 0 && rs[i] == 0) {
 				return 0;//叶子 直接返回0给父节点 设置为nullptr
 			}
-			else if (lt[i] == 0 && rt[i] != 0) {
-				return rt[i];
+			else if (ls[i] == 0 && rs[i] != 0) {
+				return rs[i];
 			}
-			else if (lt[i] != 0 && rt[i] == 0) {
-				return lt[i];
+			else if (ls[i] != 0 && rs[i] == 0) {
+				return ls[i];
 			}
 			else {
-				int mostLeft = rt[i];
+				int mostLeft = rs[i];
 				//找前驱
-				while (lt[mostLeft] != 0) {
-					mostLeft = lt[mostLeft];
+				while (ls[mostLeft] != 0) {
+					mostLeft = ls[mostLeft];
 				}
 				//删除前驱节点
 				// 从 i 节点的右孩子开始往做走 一路删除 + maintain 
 				// 回到这个位置的时候  可能换头了 
-				rt[i] = removeMostLeft(rt[i], mostLeft);
+				rs[i] = removeMostLeft(rs[i], mostLeft);
 				// 将 mostLeft这个 节点编号替代i的位置 就相当于建立新节点了
-				lt[mostLeft] = lt[i];
-				rt[mostLeft] = rt[i];
+				ls[mostLeft] = ls[i];
+				rs[mostLeft] = rs[i];
 				i = mostLeft;
 				// 最后还是会 up + maintain
 			}
@@ -214,11 +215,11 @@ void remove(int num) {
 
 // 思路其实就是和 getRank一样的  借助Size这个数组
 int index(int i, int num) {
-	if (sz[lt[i]] >= num) {//如果左树那些更小的数字都足够了  去左边找
-		return index(lt[i], num);
+	if (sz[ls[i]] >= num) {//如果左树那些更小的数字都足够了  去左边找
+		return index(ls[i], num);
 	}
-	else if(sz[lt[i]]+Count[i]<num) {//如果当前位置 加左树的 不够了  全部减去 去右树找
-		return index(rt[i], num - sz[lt[i]] - Count[i]);
+	else if(sz[ls[i]]+Count[i]<num) {//如果当前位置 加左树的 不够了  全部减去 去右树找
+		return index(rs[i], num - sz[ls[i]] - Count[i]);
 	}
 	//左树不够  左树加上Count[i]有太多了 
 	//那就是当前位置了
@@ -235,11 +236,11 @@ int pre(int i, int num) {
 		return -INF;
 	}//返回 -INF 非常小的值 尽可能取到遇到的大值
 	if (key[i] >= num) {//i的键值大或者相等   那就往左
-		return pre(lt[i], num);
+		return pre(ls[i], num);
 	}
 	else {//比key[i] 小的   可能不存在num值 继续往右
 		//取当前键值和后续与遇到的键值 尽可能大的值
-		return std::max(key[i], pre(rt[i], num));
+		return std::max(key[i], pre(rs[i], num));
 	}
 }
 
@@ -256,10 +257,10 @@ int post(int i, int num) {
 	if (key[i] > num) {
 		//键值大  符合条件的同时  和后续遇到的键值相比
 		// 取尽可能小的
-		return std::min(key[i], post(lt[i], num));
+		return std::min(key[i], post(ls[i], num));
 	}
 	else if (key[i] <= num) {
-		return post(rt[i], num);//往右 找大的
+		return post(rs[i], num);//往右 找大的
 	}
 }
 
@@ -272,8 +273,8 @@ int post(int num) {
 void clear() {
 	memset(key + 1, 0, cnt * sizeof(int));
 	memset(height + 1, 0, cnt * sizeof(int));
-	memset(lt + 1, 0, cnt * sizeof(int));
-	memset(rt + 1, 0, cnt * sizeof(int));
+	memset(ls + 1, 0, cnt * sizeof(int));
+	memset(rs + 1, 0, cnt * sizeof(int));
 	memset(Count + 1, 0, cnt * sizeof(int));
 	memset(sz + 1, 0, cnt * sizeof(int));
 	cnt = 0;
