@@ -16,6 +16,8 @@ struct TreeNode {
 
 class Solution {
 public:
+
+    //中序  or  前序(累加和数组 -->也可以优化为一个变量)
     int getMinimumDifference(TreeNode* root) {
 
     }
