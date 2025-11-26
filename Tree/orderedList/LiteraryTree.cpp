@@ -1,150 +1,216 @@
 ﻿
-// 文艺平衡树，FHQ-Treap实现范围翻转
+// 文艺平衡树，Splay实现范围翻转
 // 长度为n的序列，下标从1开始，一开始序列为1, 2, ..., n
 // 接下来会有k个操作，每个操作给定l，r，表示从l到r范围上的所有数字翻转
 // 做完k次操作后，从左到右打印所有数字
 // 1 <= n, k <= 10^5
 // 测试链接 : https://www.luogu.com.cn/problem/P3391
 #if 0
-
 #include<iostream>
 #include<algorithm>
 #include<cstring>
+
 using namespace std;
-
 #define endl "\n"
-
 const int MAXN = 1e5 + 5;
 const int INF = 0x3f3f3f3f;
-int head = 0;
+
 int cnt = 0;
+int head = 0;
 int key[MAXN];
 int ls[MAXN];
 int rs[MAXN];
-double pr[MAXN];
+int fa[MAXN];
 int sz[MAXN];
-bool rev[MAXN];
+
+bool Rev[MAXN];
+
+int stk[MAXN];
+int si = 0;//非递归 可能爆栈
 
 int ans[MAXN];
-int ansi;
+int ansi=0;
 
+//Splay 树实现需要左右垫一个数字  区间操作嘛
 
 void up(int i) {
 	sz[i] = sz[ls[i]] + sz[rs[i]] + 1;
 }
 
-//lazy 标记下发
-void down(int i){
-	if (i > 0 && rev[i] == true) {
-		std::swap(ls[i], rs[i]);//交换左右孩子
-		rev[i] = false;
-		rev[ls[i]] = !rev[ls[i]];
-		rev[rs[i]] = !rev[rs[i]];
+void down(int i) {
+	if (Rev[i]) {
+		Rev[ls[i]] = !Rev[ls[i]];
+		Rev[rs[i]] = !Rev[rs[i]];
+		std::swap(ls[i], rs[i]);
+		Rev[i] = false;
 	}
 }
-
-int init(int num) {
-	key[++cnt] = num;
-	sz[cnt] = 1;
-	pr[cnt] = (static_cast<double>(rand() % INF) / INF);
-	rev[cnt] = false;
-	return cnt;
+int leftOrRight(int i) {
+	return ls[fa[i]] == i ? 0 : 1;
 }
 
-//还是按照 rank 进行 split  小于等于rank的去左树
-void split(int l, int r, int i, int rank) {
-	if (i == 0) {
-		rs[l] = ls[r] = 0;
+void Rotate(int i) {
+	int f = fa[i], g = fa[f], soni = leftOrRight(i), sonf = leftOrRight(f);
+	if (soni == 1) {
+		//左旋
+		rs[f] = ls[i];
+		if (rs[f] != 0) {
+			fa[rs[f]] = f;
+		}
+		ls[i] = f;
 	}
 	else {
-		// i节点遇到任务 需要往下下发完lazy tag才能split
+		ls[f] = rs[i];
+		if (ls[f] != 0) {
+			fa[ls[f]] = f;
+		}
+		rs[i] = f;
+	}//设置好旋转关系
+	// 一定是要 g 不为0  切记0节点特判
+	if (g != 0) {
+		if (sonf == 0) {
+			ls[g] = i;
+		}
+		else {
+			rs[g] = i;
+		}
+	}
+	//设置fa
+	fa[f] = i;
+	fa[i] = g;
+	up(f);
+	up(i);
+}
+
+// 提根操作  大部分细节都早Rotate内 做完了
+// 这里主要就是判断 三种节点上移的情况
+// 设置好 i 和 f  最后一个判断goal是否为0 -->是否换head
+void Splay(int i, int goal) {
+	int f = fa[i], g = fa[f];
+	while (f != goal) {
+		//两个两个节点看  
+		if (g != goal) {
+			if (leftOrRight(i) == leftOrRight(f)) {
+				//一字型  先提f 再提i
+				Rotate(f);
+			}
+			else {
+				Rotate(i);
+			}
+		}
+		//大家都要做的Rotate
+		Rotate(i);
+		f = fa[i];
+		g = fa[f];
+	}
+	if (goal == 0) {
+		head = i;
+	}
+}
+
+//查找排名为rank的 节点编号
+//内置函数 不能提根
+int find(int rank) {
+	int i = head;
+	while (i != 0) {
+		//记得下发 才能正确查询信息
 		down(i);
-		// <=rank的分为左树
-		if (sz[ls[i]] + 1 <= rank) {
-			rs[l] = i;
-			// 继续去右树查找
-			split(i, r, rs[i], rank - sz[ls[i]] - 1);
+		if (sz[ls[i]] + 1 < rank) {
+			rank -= sz[ls[i]] + 1;
+			i = rs[i];
 		}
-		else { // >rank的分为右树
-			ls[r] = i;
-			split(l, i, ls[i], rank);
+		else if (sz[ls[i]] >= rank) {
+			i = ls[i];
 		}
-		up(i);
+		else if (sz[ls[i]] + 1 == rank) {
+			return i;
+		}
 	}
+	return 0;
 }
 
-int merge(int l, int r) {
-	if (l == 0 || r == 0) {
-		return l + r;
-	}
-	//按照优先级合并
-	if (pr[l] >= pr[r]) {
-		down(l);
-		rs[l] = merge(rs[l], r);
-		up(l);
-		return l;
-	}
-	else {
-		down(r);
-		ls[r] = merge(l, ls[r]);
-		up(r);
-		return r;
-	}
+
+// 需要在最左/最右垫一个数字  防止越界
+void add(int num) {
+	//每次加入一个数字  Splay到head
+	key[++cnt] = num;
+	fa[cnt] = head;
+	sz[cnt] = 1;
+
+	rs[head] = cnt;//因为每次都是 把新加入的数字Splay到head 
+	//这题 从小到大加入数字  可以直接这样
+	//标准的写法是 从head往下找到nullptr位置然后加入数字
+	Splay(cnt, 0);
 }
 
+//中序遍历的 范围 l-r
+void Reverse(int l, int r) {
+	//这个范围内的数字 翻转 那就是两次Splay 把这个区间的节点都旋转上来
+	//维护中序遍历相对次序  这里 节点编号...
+	
+	//先找到 对应位置的 节点编号 再Splay
+	
+	int fL = find(l - 1);
+	Splay(fL, 0);//右侧就是都是大于的部分
+
+	int fR = find(r + 1);
+	Splay(fR, head);
+	//现在 ls[rs[head]] 就是需要逆序的部分
+	Rev[ls[rs[head]]] = !Rev[ls[rs[head]]];
+}
+
+// 以i节点为head的子树 开始做inOrder
 void inOrder(int i) {
 	if (i != 0) {
 		down(i);
 		inOrder(ls[i]);
-		ans[ansi++] = key[i];
+		ans[++ansi] = key[i];
 		inOrder(rs[i]);
 	}
 }
 
-int n, m;
-
-void build() {
-	head = cnt = 0;
-	for (int i = 1; i <= n; i++) {
-		head = merge(head, init(i));
+void inOrder() {
+	si = 0;
+	int i = head;
+	while (si > 0 || i != 0) {
+		//只要存在左树 就一直去左树处理
+		// 然后 如果存在右树的话 去右树
+		if (i != 0) {// i!=0 !!!   只要现在着个节点不为nullptr 就去左树看
+			//把左树处理完
+			down(i);//lazy tag下发
+			stk[si++] = i;
+			i = ls[i];
+		}
+		else{//当前节点为nullptr了  回溯
+			i = stk[--si];
+			//再次回到这个节点就是 第二次了  -->收集
+			ans[++ansi] = key[i];
+			i = rs[i];// 收集完自己的左树 + 自己 去右树查看
+		}
 	}
 }
 
-//翻转区间 Lt 到 Rt
-// 两次split  打上lazy tag + merge回到原始的状态
-void Reve(int Lt, int Rt) {
-	split(0, 0, head, Rt);
-	//   <=Rt          >Rt
-	int l = rs[0], r = ls[0];
-	split(0, 0, l, Lt - 1);
-	// <Lt		     >=Lt  <=Rt
-	int ll = rs[0], lr = ls[0];
-	rev[lr] = !rev[lr];// 需要这样  
-	//不能写成 rev[lr] = true这样  
-	// 因为可能原本是 true  然后再次翻转就应该是原样 --> rev[lr]=false
-	head = merge(merge(ll, lr), r);
-}
-
+int n, m;
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr);
-	srand(time(nullptr));
 
 	cin >> n >> m;
-	build();
-	// m 次 reverse
-	for (int i = 0, Lt, Rt; i < m; i++) {
-		cin >> Lt >> Rt;//翻转的区间
-		Reve(Lt, Rt);
+	add(0);
+	for (int i = 1; i <= n; i++) {
+		add(i);
 	}
-
-	ansi = 0;
-	inOrder(head);
-	cout << ans[0];
-	for (int i = 1; i < ansi; i++) {
+	add(0);
+	for (int i = 0, l, r; i < m; i++) {
+		cin >> l >> r;
+		Reverse(l+1, r+1);//最左侧垫了一个数字
+	}
+	//inOrder(head);
+	inOrder();
+	cout << ans[2];
+	for (int i = 3; i < ansi; i++) {
 		cout << " " << ans[i];
 	}
 	cout << endl;
 }
-
 #endif
