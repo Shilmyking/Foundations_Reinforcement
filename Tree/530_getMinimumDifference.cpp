@@ -16,9 +16,24 @@ struct TreeNode {
 
 class Solution {
 public:
-
+    const int INF = 0x3f3f3f3f;
     //中序  or  前序(累加和数组 -->也可以优化为一个变量)
-    int getMinimumDifference(TreeNode* root) {
+    int last = -INF;
+    int Min = INF;
+    void inOrder(TreeNode* root) {
+        if (root != nullptr) {
+            inOrder(root->left);
+            if (last != -INF) {
+                Min = std::min(Min, root->val - last);
+            }
+            last = root->val;
+             inOrder(root->right);
+        }
 
+    }
+
+    int getMinimumDifference(TreeNode* root) {
+        inOrder(root);
+        return Min;
     }
 };

@@ -16,7 +16,21 @@ struct TreeNode {
 
 class Solution {
 public:
-    int kthSmallest(TreeNode* root, int k) {
+    int cnt = 0;
+    int ans;
+    void inOrder(TreeNode* root,int k) {
+        if (root != nullptr) {
+            inOrder(root->left, k);
+            cnt++;
+            if (cnt == k) {
+                ans = root->val;
+            }
+            inOrder(root->right, k);
+        }
+    }
 
+    int kthSmallest(TreeNode* root, int k) {
+        inOrder(root, k);
+        return ans;
     }
 };

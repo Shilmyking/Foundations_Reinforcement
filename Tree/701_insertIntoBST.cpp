@@ -16,7 +16,33 @@ struct TreeNode {
 
 class Solution {
 public:
+    TreeNode* insert(TreeNode* root, int val) {
+        TreeNode* cur = root;
+        TreeNode* last = nullptr;
+        int soni = 0;//左
+        while (cur != nullptr) {
+            last = cur;
+            if (cur->val >= val) {
+                cur = cur->left;
+                soni = 0;
+            }
+            else {
+                cur = cur->right;
+                soni = 1;
+            }
+        }
+        if (last == nullptr) {
+            return new TreeNode(val);
+        }
+        if (soni == 0) {
+            last->left = new TreeNode(val);
+        }
+        else {
+            last->right = new TreeNode(val);
+        }
+        return root;
+    }
     TreeNode* insertIntoBST(TreeNode* root, int val) {
-
+        return insert(root, val);
     }
 };
