@@ -46,7 +46,7 @@ public:
     }
 };
 
-
+#if 0
 char cnt = 'a';
 
 void dfs(TreeNode* root) {
@@ -81,3 +81,4 @@ signed main() {
 
     cout << sizeof(long);
 }
+#endif

@@ -9,7 +9,7 @@
 // 1 <= n <= 2 * 10^5
 // 本题目要求强制在线，具体规则可以打开测试链接查看
 // 测试链接 : https://www.luogu.com.cn/problem/P5055
-
+#if 0
 #include<iostream>
 #include<algorithm>
 #include<cstring>
@@ -190,3 +190,4 @@ signed main() {
 		}
 	}
 }
+#endif
