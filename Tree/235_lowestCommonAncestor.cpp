@@ -25,7 +25,14 @@ class Solution {
         }
         int Min = p->val > q->val ? q->val:p->val;
         int Max = Min == p->val ? q->val : p->val;
-        if()
+        if (root->val > Max) {
+            root = f(root->left, p, q);
+        }
+        if (root->val < Min) {
+            root = f(root->right,p,q);
+        }
+        //当前情况 只可能是 介于两数之间  直接返回  自己就是最近公共祖先
+        return root;
     }
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
