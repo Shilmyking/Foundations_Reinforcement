@@ -18,8 +18,17 @@ struct TreeNode {
 
 //BSTree 下
 class Solution {
+    //利用BSTree性质
+    TreeNode* f(TreeNode*root,TreeNode*p,TreeNode*q) {
+        if (root == nullptr || root == p || root == q) {
+            return root;
+        }
+        int Min = p->val > q->val ? q->val:p->val;
+        int Max = Min == p->val ? q->val : p->val;
+        if()
+    }
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-
+        return f(root, p, q);
     }
 };
