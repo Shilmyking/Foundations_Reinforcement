@@ -22,6 +22,7 @@ int morris[MAXN], morrisi = 0;
 int pre[MAXN],prei=0;
 int in[MAXN], ini=0;
 int post[MAXN], posti = 0;
+
 TreeNode* reverse(TreeNode* root);
 void collect(TreeNode* root);
 
