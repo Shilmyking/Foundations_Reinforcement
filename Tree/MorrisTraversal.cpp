@@ -22,34 +22,8 @@ int morris[MAXN], morrisi = 0;
 int pre[MAXN],prei=0;
 int in[MAXN], ini=0;
 int post[MAXN], posti = 0;
-
-TreeNode* reverse(TreeNode* root) {
-    TreeNode* pre = nullptr;
-    TreeNode* cur = root;
-    TreeNode* next = nullptr;
-    while (cur != nullptr) {
-        next = cur->right;
-        cur->right = pre;
-        pre = cur;
-        cur = next;
-    }
-    return pre;
-}
-
-
-// 收集 当前节点为root的子树的 右边界
-// 当然是要逆序收集 
-void collect(TreeNode* root) {
-    //抓末尾节点
-    TreeNode* tail = reverse(root);
-    TreeNode* cur = tail;
-    //遍历收集一遍
-    while (cur != nullptr) {
-        post[posti++] = cur->val;
-        cur = cur->right;
-    }
-    reverse(tail);//恢复结构
-}
+TreeNode* reverse(TreeNode* root);
+void collect(TreeNode* root);
 
 
 void Morris(TreeNode* root) {
@@ -100,6 +74,33 @@ void Morris(TreeNode* root) {
     collect(root);
 }
 
+TreeNode* reverse(TreeNode* root) {
+    TreeNode* pre = nullptr;
+    TreeNode* cur = root;
+    TreeNode* next = nullptr;
+    while (cur != nullptr) {
+        next = cur->right;
+        cur->right = pre;
+        pre = cur;
+        cur = next;
+    }
+    return pre;
+}
+
+
+// 收集 当前节点为root的子树的 右边界
+// 当然是要逆序收集 
+void collect(TreeNode* root) {
+    //抓末尾节点
+    TreeNode* tail = reverse(root);
+    TreeNode* cur = tail;
+    //遍历收集一遍
+    while (cur != nullptr) {
+        post[posti++] = cur->val;
+        cur = cur->right;
+    }
+    reverse(tail);//恢复结构
+}
 
 void print() {
     cout << "morris: ";
@@ -122,7 +123,6 @@ void print() {
 }
 
 int main() {
-
 
     TreeNode* llt = new TreeNode(4);
     TreeNode* lrt = new TreeNode(5);
