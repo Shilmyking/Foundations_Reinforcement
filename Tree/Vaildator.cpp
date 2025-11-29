@@ -1,4 +1,5 @@
 ﻿
+#if 0
 #include <iostream>
 #include <vector>
 #include<cstring>
@@ -115,3 +116,4 @@ int main() {
 	cout << root->val << endl;
 	printTree(root);
 }
+#endif

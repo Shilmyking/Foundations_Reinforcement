@@ -150,4 +150,36 @@ public:
         return f11(root);
     }
 
+    bool Morris(TreeNode* root) {
+        TreeNode* cur = root;
+        TreeNode* last = nullptr;
+        bool ans = true;
+        while (cur != nullptr) {
+            TreeNode* mostRight = cur->left;
+            if (mostRight != nullptr) {
+                while (mostRight->right != nullptr && mostRight->right != cur) {
+                    mostRight = mostRight->right;
+                }
+                if (mostRight->right != cur) {//第一次
+                    mostRight->right = cur;
+                    cur = cur->left;
+                    continue;
+                }
+                else {
+                    mostRight->right = nullptr;
+                }
+            }
+            // 不能提前返回 需要把此前修改过的指针 改回去
+            if (last != nullptr && last->val >= cur->val) {
+                ans = false;
+            }
+            last = cur;
+            cur = cur->right;
+        }
+        return ans;
+    }
+
+    bool isValidBST4(TreeNode* root) {
+        return Morris(root);
+    }
 };
