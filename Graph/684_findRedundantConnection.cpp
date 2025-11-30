@@ -18,7 +18,6 @@ vector<int>ans(2);
 //  然后继续操作
 
 void build() {
-    memset(fa, 0, sizeof(fa));
     for (int i = 0; i < MAXN; i++)
     {
         fa[i] = i;
@@ -50,7 +49,9 @@ public:
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
         int n = edges.size();
         build();
-
+        for (int i = 0; i < n; i++) {
+            Union(edges[i][0], edges[i][1]);
+        }
         return ans;
     }
 };

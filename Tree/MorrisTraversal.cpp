@@ -1,11 +1,9 @@
 ﻿
-
 #include<algorithm>
 #include<vector>
 #include<iostream>
 #include<string>
 #include<cstring>
-
 using namespace std;
 
 struct TreeNode {
@@ -40,6 +38,7 @@ void Morris(TreeNode* root) {
             }
             //第一次来到cur这个节点
             if (mostRight->right != cur) {
+
                 morris[morrisi++] = cur->val;
                 pre[prei++] = cur->val;
                 cout << "first time（waiting for second time）:" << cur->val << endl;
@@ -48,7 +47,7 @@ void Morris(TreeNode* root) {
                 //cur 往左继续走
                 cur = cur->left;
             }
-            else {
+            else {//cur
                 morris[morrisi++] = cur->val;
                 in[ini++] = cur->val;
                 cout << "second time:" << cur->val << endl;

@@ -169,13 +169,17 @@ public:
                     mostRight->right = nullptr;
                 }
             }
+
             // 不能提前返回 需要把此前修改过的指针 改回去
             if (last != nullptr && last->val >= cur->val) {
                 ans = false;
+                return false;
             }
             last = cur;
+
             cur = cur->right;
         }
+
         return ans;
     }
 
