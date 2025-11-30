@@ -18,6 +18,37 @@ struct TreeNode {
 // Morris遍历？？
 class Solution {
 public:
+    void Morris(TreeNode* root) {
+        TreeNode* cur = root;
+        while (cur != nullptr) {
+            TreeNode* mostRight = cur->left;
+            if (mostRight != nullptr) {
+                
+                while (mostRight->right != nullptr) {
+                    mostRight = mostRight->right;
+                }
+                // mostRight就是前驱  此刻右孩子为nullptr  接上cur的右孩子
+                mostRight->right = cur->right;
+
+                // cur右孩子改为指向左孩子
+                cur->right = cur->left;
+                cur->left = nullptr;//这里恰好 退出if再次遇到if --->走right了
+            }
+            else {
+                cur = cur->right;//就是此前原树的左孩子
+            }
+
+        }
+    }
+
+    void flatten(TreeNode* root) {
+        if (root != nullptr) {
+            root = f1(root);
+        }
+        //Morris(root);
+    }
+
+
     //后序  左右根
     TreeNode* prev = nullptr;//记录上一个遍历到的节点
     void flt(TreeNode* root) {
@@ -67,33 +98,4 @@ public:
     //}
 
 
-
-    void Morris(TreeNode* root) {
-        TreeNode* cur = root;
-        while (cur != nullptr) {
-            if (cur->left != nullptr) {
-                TreeNode* pre = cur->left;
-                while (pre->right != nullptr) {
-                    pre = pre->right;
-                }
-                // pre就是前驱
-                pre->right = cur->right;
-
-                //本题 右孩子改为指向左孩子
-                cur->right = cur->left;
-                cur->left = nullptr;//这里恰好 退出if再次遇到if --->走right了
-            }
-            else {
-                cur = cur->right;//就是此前原树的左孩子
-            }
-
-        }
-    }
-
-    void flatten(TreeNode* root) {
-        if (root != nullptr) {
-            root = f1(root);
-        }
-        //Morris(root);
-    }
 };
