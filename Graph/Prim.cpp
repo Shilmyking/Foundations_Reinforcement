@@ -24,7 +24,7 @@ struct Edge {
 	}
 };
 
-vector<vector<Edge>>edges(MAXM);
+vector<vector<Edge>>edges(MAXN);
 bool Query[MAXN + 1];
 int nodeCnt = 0;
 

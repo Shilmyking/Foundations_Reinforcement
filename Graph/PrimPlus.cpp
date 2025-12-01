@@ -1,4 +1,6 @@
-﻿#include<iostream>
+﻿#if 0
+
+#include<iostream>
 #include<algorithm>
 #include<vector>
 #include<cstring>
@@ -153,3 +155,5 @@ signed main() {
 	}
 	Prim();
 }
+
+#endif
