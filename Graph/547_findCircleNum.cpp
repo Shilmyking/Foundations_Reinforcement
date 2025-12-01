@@ -1,4 +1,4 @@
-﻿
+﻿#if 0
 #include<iostream>
 #include<algorithm>
 #include<cstring>
@@ -36,7 +36,6 @@ void Union(int i, int j) {
 class Solution {
 public:
 
-
     //并查集
     int findCircleNum(vector<vector<int>>& isConnected) {
         build();
@@ -53,3 +52,4 @@ public:
         return ans;
     }
 };
+#endif

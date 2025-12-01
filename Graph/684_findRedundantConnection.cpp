@@ -2,7 +2,7 @@
 // 并查集  如果后续出现 加入一条边  冲突===>环
 // 记录答案
 
-
+#if 0
 #include<iostream>
 #include<algorithm>
 #include<cstring>
@@ -55,3 +55,4 @@ public:
         return ans;
     }
 };
+#endif
