@@ -1,4 +1,6 @@
-﻿#if 0
+﻿
+#if 0
+
 #include<iostream>
 #include<algorithm>
 #include<vector>
@@ -74,4 +76,5 @@ int main() {
 	}
 	DJ(Graph);
 }
+
 #endif
