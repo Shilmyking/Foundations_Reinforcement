@@ -15,7 +15,7 @@
 using namespace std;
 
 
-
+static const int Move[5]{ 0,-1,0,1,0 };
 class Solution {
     //并查集
     static const int MAXN = 1e5;
@@ -58,7 +58,7 @@ class Solution {
     //左和上
     const int Move[3]{ 0,-1,0 };
 public:
-    int numIslands(vector<vector<char>>& grid) {
+    int numIslands1(vector<vector<char>>& grid) {
         n = grid.size(), m = grid[0].size();
         build(grid);
         for (int i = 0; i < n; i++) {
@@ -81,5 +81,34 @@ public:
         }
         return sets;
     }
+
+    // 上 左 右 下
+
+    int num = 0;
+    int n, m;
+    int numIslands(vector<vector<char>>& grid) {
+        n = grid.size(), m = grid[0].size();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == '1') {
+                    num++;
+                    dfs(grid, i, j);
+                }
+
+            }
+        }
+        return num;
+    }
+
+    void dfs(vector<vector<char>>& grid, int i, int j) {
+        if (i < 0 || i >= n || j < 0 || j >= m || grid[i][j] != '1') {
+            return;
+        }
+        grid[i][j] = '2';
+        for (int k = 0; k < 4; k++) {
+            dfs(grid, i + Move[k], j + Move[k + 1]);
+        }
+    }
+
 
 };
