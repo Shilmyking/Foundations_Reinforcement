@@ -1,7 +1,8 @@
 ﻿
 
-//// 无序数组中第K大的元素
-//// 测试链接 : https://leetcode.cn/problems/kth-largest-element-in-an-array/
+// 无序数组中第K大的元素
+// 测试链接 : https://leetcode.cn/problems/kth-largest-element-in-an-array/
+
 //public class RandomizedSelect {
 //
 //	// 随机选择算法，时间复杂度O(n)
