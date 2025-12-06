@@ -1,4 +1,5 @@
-﻿#include<random>
+﻿
+#include<random>
 #include<cstring>
 #include<string>
 #include<algorithm>

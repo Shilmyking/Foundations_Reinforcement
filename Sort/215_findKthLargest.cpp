@@ -18,8 +18,6 @@
 using namespace std;
 #define endl "\n"
 
-
-
 const int MAXN = 1e5 + 5;
 int heap[MAXN];
 int heapSize = 0;

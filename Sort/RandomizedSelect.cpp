@@ -6,16 +6,8 @@
 #include<list>
 #include<vector>
 #include<string>
-#include<map>
-#include<unordered_map>
-#include<set>
-#include<unordered_set>
-#include<time.h>
-#include<random>
 
 using namespace std;
-#define endl "\n"
-
 
 // 无序数组中第K大的元素
 // 测试链接 : https://leetcode.cn/problems/kth-largest-element-in-an-array/
