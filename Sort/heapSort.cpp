@@ -68,6 +68,11 @@ void heapSort() {
 	}
 }
 
+void add(int num) {
+	nums[heapSize] = num;
+	heapInsert(heapSize++);
+}
+
 void print() {
 	// 逆序打印
 	cout << nums[n-1];
@@ -84,6 +89,7 @@ int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr);
 	cin >> n;
+	heapSize = n;
 	for (int i = 0; i < n; i++) {
 		cin >> nums[i];
 	}
