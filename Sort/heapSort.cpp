@@ -1,4 +1,5 @@
-﻿
+﻿#if 0
+
 #include<iostream>
 #include<queue>
 #include<algorithm>
@@ -82,9 +83,6 @@ void print() {
 	cout << endl;
 }
 
-
-
-
 int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(nullptr);
@@ -97,3 +95,5 @@ int main() {
 	print();
 
 }
+
+#endif
