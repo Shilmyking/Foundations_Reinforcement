@@ -59,7 +59,7 @@ public:
 	}
 
 	~HashTable() {
-		delete table_;
+		delete [] table_;
 		table_ = nullptr;
 	}
 
@@ -156,7 +156,7 @@ private:
 		}
 		delete[]table_;
 		table_ = newTable;
-		tableSize_ = primes_[PRIME_SIZE];
+		tableSize_ = primes_[primeIdx_];
 	}
 
 private:
