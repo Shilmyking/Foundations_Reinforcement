@@ -84,7 +84,7 @@ Edge heapPop() {
 	return top;
 }
 
-void Prim() {
+void prim() {
 	int ans = 0;
 	//选取1为起点开始算法
 	nodeCnt = 1;
@@ -125,7 +125,7 @@ signed main() {
 		edges[u].push_back(Edge(u, v, w));
 		edges[v].push_back(Edge(v, u, w));
 	}
-	Prim();
+	prim();
 }
 
 #endif

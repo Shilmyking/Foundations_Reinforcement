@@ -1,4 +1,5 @@
 ﻿#if 0
+
 #include<iostream>
 #include<algorithm>
 using namespace std;
@@ -19,6 +20,7 @@ struct Edge {
 		return weight < e.weight;
 	}
 };
+
 Edge edges[MAXM];
 
 int fa[MAXN];

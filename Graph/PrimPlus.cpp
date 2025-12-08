@@ -1,4 +1,5 @@
 ﻿#if 0
+//https://www.luogu.com.cn/problem/P3366
 #include<iostream>
 #include<algorithm>
 #include<vector>
@@ -54,6 +55,7 @@ void Swap(int i, int j) {
 	// Where数组 维护的 (节点编号-->堆内的索引编号)
 	int vi = heap[i][0];
 	int vj = heap[j][0];
+
 	Where[vi] = j;
 	Where[vj] = i;
 
