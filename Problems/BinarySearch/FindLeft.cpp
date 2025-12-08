@@ -1,7 +1,4 @@
 ﻿
-
-
-
 #include<vector>
 #include<iostream>
 #include<queue>
@@ -17,30 +14,28 @@
 #include <ctime>     
 
 using namespace std;
+
+
+
+// 二分答案法基础
 // 有序数组中找>=num的最左位置
-
-
-#if 0
-int binarySearch(const std::vector<int>& nums, int num) {
-	if (nums.empty()) { // 检查数组是否为空
-		return false;
+int bSearchLeft(const vector<int>& nums, int val) {
+	int n = nums.size(), ans = -1;
+	if (n == 0) {
+		return ans;
 	}
-
-	int l = 0;
-	int r = nums.size() - 1; // 正确获取数组大小
-	int ans = -1;//代表不存在 
-
-	while (l <= r) {
-		int mid = l + ((r - l) >> 1);
-		if (nums[mid] >= num) {
+	int left = 0, right = n-1,mid = (left+right)/2;
+	while (left <= right) {
+		mid = (left + right) / 2;
+		if (nums[mid] >= val) {
 			ans = mid;
-			//再继续往左压缩
-			r = mid - 1;
+			right = mid - 1;//往左压缩 只要还存在>=val的位置
 		}
 		else {
-			l = mid + 1;
+			left = mid + 1;
 		}
 	}
-	return ans;
+	return ans;//return ans最左位置
 }
-#endif
+
+

@@ -1,6 +1,6 @@
 ﻿
 // 有序数组中是否存在一个数字
-
+#if 0
 #include<vector>
 #include<iostream>
 #include<queue>
@@ -18,7 +18,28 @@
 
 using namespace std;
 
-#if 0
+
+bool bSearch(const vector<int>& nums, int val) {
+	if (nums.size() == 0) {
+		return false;
+	}
+	int n = nums.size();
+	int left = 0, right = n - 1, mid = (left + right) / 2;
+	while (left <= right) {
+		mid = (left + right) / 2;
+		if (nums[mid] > val) {
+			left = mid + 1;
+		}
+		else if (nums[mid] < val) {
+			right = mid - 1;
+		}
+		else {
+			return true;
+		}
+	}
+	return false;
+}
+
 // 为了验证（"对数器"的正确方法）
 // 保证 arr 有序
 bool linearSearch(const std::vector<int>& arr, int num) {
@@ -119,4 +140,4 @@ int main() {
 	std::cout << "测试结束" << std::endl;
 	return 0;
 }
-#endif 
+#endif
