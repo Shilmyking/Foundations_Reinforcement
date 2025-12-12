@@ -18,7 +18,6 @@ WPL = (W1 * L1 + W2 * L2 + .....Wn * Ln);
 
 
 使用最小堆！ priority_queeu 默认为一个大根堆 =>改为小根堆
-
 向左走为0，向右走为1
 
 */
@@ -36,7 +35,7 @@ F:1
 G:1
 
 变长编码
-具有立刻解码性（其他编码序号不为当前编码的前缀）
+具有立刻解码性（其他编码序号不为当前编码的前缀） 非常重要的特性 ：其他编码序号不为当前编码的前缀
 因为字符（权值）都出现再叶子节点
 A01
 D10
@@ -47,13 +46,6 @@ F0010
 G0011
 
 */
-#include<iostream>
-#include<unordered_map>
-#include<string>
-#include<cstring>
-#include<functional>
-#include<queue>//
-
 
 /*
 文件压缩 20k -->12k  100M -->20M
@@ -64,203 +56,183 @@ G0011
 存储0、1码 还要把原始文件字节数据以及权值存储到压缩文件当中
 解压缩时才能生成哈夫曼树  继续读取压缩文件里的0、1码，根据哈夫曼树，解压缩、还原出原始的文件数据
 
-
-*/
-/*
-using MinHeap = priority_queue < Node*, vector<Node*>, function < bool(Node*, Node*)>>;
-MinHeap minHeap_;
-minHeap_([](Node* n1, Node* n2)->bool {return n1->weight_ > n2->weight_; })//初始化为小根堆
-
-如果给定
-节点 权值
-节点 权值
 */
 #if 0
+#include<queue>
+#include<algorithm>
+#include<iostream>
+#include<map>
+#include<unordered_map>
+#include<functional>
+
 using namespace std;
+
 using uint = unsigned int;
-using PAIR = pair<string, uint>;
-class HuffmanTree {
-public:
-	//传入函数对象
-	HuffmanTree()
-		:minHeap_([](Node* n1, Node* n2)->bool {return n1->weight_ > n2->weight_; })//初始化为小根堆
-		, root_(nullptr)
+struct Node {
+	Node* left;
+	Node* right;
+	uint weight;
+	char data;
+	Node(char data, uint weight, Node* left = nullptr, Node* right = nullptr)
+		:data(data),
+		weight(weight),
+		left(left),
+		right(right)
 	{}
-	~HuffmanTree() {//层序遍历  广度优先析构
-		queue<Node*>que;
-		que.push(root_);
-		if (root_ == nullptr)
-			return;
-		while (!que.empty()) {
-			Node* node = que.front();
-			que.pop();
-			if (node->left_ != nullptr)
-				que.push(node->left_);
-			if (node->right_ != nullptr)
-				que.push(node->right_);
-			delete node;
-		}
-		return;
-	}
-	//创建哈夫曼树（给定所有字符 ---转换为其他符号传输）
-	void creatstring(string str) {
-		//先统计字符的权值
-		unordered_map<char, uint>dateMap;
-		for (char ch : str) {
-			dateMap[ch]++;
-		}
-
-		//生成节点，放入小根堆
-		for (auto& pair : dateMap) {//传引用
-			minHeap_.push(new Node(pair.first, pair.second));//字符  权值
-		}
-
-		//处理小根堆直至一个元素
-		while (minHeap_.size() > 1) {
-			Node* n1 = minHeap_.top();
-			minHeap_.pop();
-			Node* n2 = minHeap_.top();
-			minHeap_.pop();
-			//生成父节点
-			Node* node = new Node('\0', n1->weight_ + n2->weight_);//父节点不存储字符
-			node->left_ = n1;
-			node->right_ = n2;
-			minHeap_.push(node);//返回为小根堆
-		}
-
-		root_ = minHeap_.top();//最后一个数为根节点
-		minHeap_.pop();
-	}
-
-	void creatchar(int n) {
-		int tmp = n - 1;
-
-		while (tmp--) {
-			char ch; uint num;
-			cin >> ch >> num;
-			minHeap_.emplace(new Node(ch, num));
-		}
-
-		while (minHeap_.size() > 1) {
-			Node* n1 = minHeap_.top();
-			minHeap_.pop();
-			Node* n2 = minHeap_.top();
-			minHeap_.pop();
-			Node* node = new Node('\0', n1->weight_ + n2->weight_);
-			node->left_ = n1;
-			node->right_ = n2;
-			minHeap_.emplace(node);
-		}
-
-		root_ = minHeap_.top();
-		minHeap_.pop();
-
-	}
-	//输出哈夫曼编码
-	void showHuffmanTree() {
-		string code = "";
-		getHuffmanCode(root_, code);
-
-		for (auto& pair : codeMap_) {
-			cout << pair.first << ": " << pair.second << endl;
-		}
-
-		cout << endl;
-	}
-	void getHuffmanCode() {
-		string code = "";//传入，递推遍历时到节点 将对应字符给为编码
-		getHuffmanCode(root_, code);
-	}
-
-	//encode
-	string encode(string str) {
-		getHuffmanCode();
-		string encode_str;
-
-		for (auto ch : str) {
-			encode_str.append(codeMap_[ch]);
-		}
-
-		return encode_str;
-	}
-	string decode(string encode) {
-		string decode_str;
-		Node* cur = root_;
-
-		if (root_ == nullptr)
-			return "";
-
-		for (char ch : encode) {
-			if (ch == '0') {
-				cur = cur->left_;
-			}
-			else {
-				cur = cur->right_;
-			}
-			if (cur->left_ == nullptr && cur->right_ == nullptr) {
-				decode_str.push_back(cur->date_);
-				cur = root_;
-			}
-		}
-
-		return decode_str;
-	}
-
-private:
-	struct Node {
-		Node(char date, uint weight)
-			:date_(date)
-			, weight_(weight)
-			, left_(nullptr)
-			, right_(nullptr)
-		{}
-		//bool operator>(const Node& node)const { return weight_ > node.weight_; }
-		char date_;//字符数据
-		uint weight_;//节点权值
-		Node* left_;//左孩子
-		Node* right_;//右孩子
-
-	};
-
-private:
-	Node* root_;//指向根节点
-	unordered_map<char, string>codeMap_;//存储字符对应的哈夫曼编码
-	//自定义小根堆排序方法
-	//存储Node* 提供比较方法（权值）不然比较地址 给函数对象---》比较方法
-	using MinHeap = priority_queue < Node*, vector<Node*>, function < bool(Node*, Node*)>>;
-	MinHeap minHeap_;
-
-private:
-
-	void getHuffmanCode(Node* root_, string code) {
-		//VLR
-		if (root_ == nullptr)
-			return;
-		if (root_->left_ == nullptr && root_->right_ == nullptr) {//到达根节点
-			codeMap_[root_->date_] = code;//尾节点---》string node
-			return;
-		}
-
-		getHuffmanCode(root_->left_, code + "0");//哈夫曼树往左走则加0
-		getHuffmanCode(root_->right_, code + "1");//
+	bool operator<(const Node& node) {
+		return weight > node.weight;// 默认的大根堆 反转为小根堆
 	}
 };
 
-int main() {
-	HuffmanTree htree;
-	int n;
-	cin >> n;
-	htree.creatchar(n);
-	htree.showHuffmanTree();
-	return 0;
-}
+using MinHeap = priority_queue<Node*, vector<Node*>, function<bool(Node*, Node*)>>;
 
-int main_1() {
-	int n;
-	cin >> n;
-	string str = "NEWNEWSTRINGSTRINGCODE";
+class HuffmanTree {
+
+public:
+	HuffmanTree()
+		:minHeap([](Node* n1, Node* n2)->bool {return n1->weight > n2->weight; }),
+		root(nullptr)
+	{}
+
+	~HuffmanTree() {
+		if (root != nullptr) {
+			//层序遍历释放所有节点
+			queue<Node*> que;
+			que.push(root);
+			while (!que.empty()) {
+				Node* top = que.front();
+				if (top->left != nullptr) {
+					que.push(top->left);
+				}
+				if (top->right != nullptr) {
+					que.push(top->right);
+				}
+				delete top;
+			}
+		}
+	}
+	//创建哈夫曼树（给定所有字符 ---转换为其他符号传输）
+	void createstring(const string& str) {
+		unordered_map<char, uint>dataMap;//词频
+		//统计词频
+		for (int i = 0; i < str.size(); i++) {
+			dataMap[str[i]]++;
+		}
+
+		//char + weight 入堆
+		for (auto& pair : dataMap) {
+			minHeap.push(new Node(pair.first, pair.second));
+		}
+
+		//所有节点入堆了 从权值小的从底往上建树
+		while (minHeap.size() > 1) {
+			//取出权值最小的两个节点 创建父节点
+			Node* left = minHeap.top(); minHeap.pop();
+			Node* right = minHeap.top(); minHeap.pop();
+			Node* head = new Node('\0', left->weight + right->weight, left, right);
+			minHeap.push(head);
+		}
+		root = minHeap.top();//最后一个就是root
+		getHuffmanCode();//填好 codeMap
+	}
+
+	//输入 char + 词频进行建树
+	void creatchar(int n) {
+		char ch;
+		uint weight;
+		while (n--) {
+			cin >> ch >> weight;
+			minHeap.push(new Node(ch, weight));
+		}
+		//所有节点入堆了 从权值小的从底往上建树
+		while (minHeap.size() > 1) {
+			//取出权值最小的两个节点 创建父节点
+			Node* left = minHeap.top(); minHeap.pop();
+			Node* right = minHeap.top(); minHeap.pop();
+			Node* head = new Node('\0', left->weight + right->weight, left, right);
+			minHeap.push(head);
+		}
+		root = minHeap.top();//最后一个就是root
+		getHuffmanCode();
+	}
+
+	//输出哈夫曼编码
+	void showHuffmanTree() {
+		for (auto& pair : codeMap) {
+			cout << pair.first << ": " << pair.second << endl;
+		}
+		cout << endl;
+	}
+
+	//encode
+	string encode(const string& str) {
+		string encodeString;
+		// 遍历每一个char  查表
+		for (int i = 0; i < str.size(); i++) {
+			encodeString.append(codeMap[str[i]]);
+		}
+		return encodeString;
+	}
+
+	// 传入的是一个 01序列
+	string decode(const string& encode) {
+		string decodeString;//解码为字符
+		Node* cur = root;
+
+		if (root == nullptr) {
+			return decodeString;
+		}
+
+		for (int i = 0; i < encode.size(); i++) {
+			if (encode[i] == '0') {
+				cur = cur->left;
+			}
+			else { // '1'
+				cur = cur->right;
+			}
+			if (cur == nullptr) {
+				//??建树出错了
+				throw "error:decode";
+				return decodeString;
+			}
+			//到达叶子节点 收集答案
+			if (cur->left == nullptr && cur->right == nullptr) {
+				decodeString.push_back(cur->data);
+				cur = root;//从根继续开始解码下一个
+			}
+		}
+
+		return decodeString;
+	}
+private:
+	void getHuffmanCode() {
+		getHuffmanCode(root, "");//统计所有叶节点的 编码值  填好codeMap表
+	}
+
+	void getHuffmanCode(Node* head, string code) {
+		if (head == nullptr) {//当前为nullptr节点 啥也没有
+			return;
+		}
+		//叶子节点
+		if (head->left == nullptr && head->right == nullptr) {
+			codeMap[head->data] = code;
+			return;
+		}
+		//左滑 0
+		getHuffmanCode(head->left, code + "0");
+		getHuffmanCode(head->right, code + "1"); // 右滑 1
+	}
+
+private:
+	Node* root;
+	unordered_map<char, string>codeMap;//编码
+	MinHeap minHeap;
+};
+
+int main() {
+	string str = "aaaabbbcccddeefg";
 	HuffmanTree htree;
-	htree.creatstring(str);
+	htree.createstring(str);
 	htree.showHuffmanTree();
 	//string encode = htree.encode(str);
 	//cout << "encode:" << htree.encode(str) << endl;
