@@ -1,7 +1,7 @@
 ﻿/*
 最佳判定数、最优二叉树时一种带权路径长度最短的二叉树，常用于数据压缩
 带权路径长度时书中所有的叶子节点的权只诚意其到根节点的路径长度
-WPL = (W1 * L1 + W2 * L2 + .....Wn * Ln);
+Sum = (W1 * L1 + W2 * L2 + .....Wn * Ln);
 
 一组权值
 从权值里面选取最小的两个权值，构造一颗二叉树出来
@@ -57,7 +57,8 @@ G0011
 解压缩时才能生成哈夫曼树  继续读取压缩文件里的0、1码，根据哈夫曼树，解压缩、还原出原始的文件数据
 
 */
-#if 0
+
+
 #include<queue>
 #include<algorithm>
 #include<iostream>
@@ -101,6 +102,7 @@ public:
 			que.push(root);
 			while (!que.empty()) {
 				Node* top = que.front();
+				que.pop();
 				if (top->left != nullptr) {
 					que.push(top->left);
 				}
@@ -175,6 +177,8 @@ public:
 	}
 
 	// 传入的是一个 01序列
+	// 01 010 111 011 00
+	// 
 	string decode(const string& encode) {
 		string decodeString;//解码为字符
 		Node* cur = root;
@@ -182,7 +186,9 @@ public:
 		if (root == nullptr) {
 			return decodeString;
 		}
-
+		int Size = encode.size();
+		// Size  O(1) 
+		// inline 
 		for (int i = 0; i < encode.size(); i++) {
 			if (encode[i] == '0') {
 				cur = cur->left;
@@ -220,6 +226,7 @@ private:
 		}
 		//左滑 0
 		getHuffmanCode(head->left, code + "0");
+
 		getHuffmanCode(head->right, code + "1"); // 右滑 1
 	}
 
@@ -229,6 +236,162 @@ private:
 	MinHeap minHeap;
 };
 
+
+class {
+
+};
+
+struct TreeNode {
+	TreeNode* left;
+	TreeNode* right;
+	uint weight;
+	TreeNode(int w, TreeNode* left = nullptr, TreeNode* right = nullptr)
+		:weight(w),
+		left(left),
+		right(right)
+	{}
+};
+
+int WPL = 0;
+// 0
+int dfs_WPL(TreeNode* root, int depth) {
+	if (root == nullptr) {
+		return 0;
+	}
+	//叶子节点收集答案
+	if (root->left == nullptr && root->right == nullptr) {
+		WPL += root->weight * (depth );
+		cout << "depth: " << depth  <<" curNodeWeight: " << root->weight<< " curWPL: " << WPL << endl;
+	}
+	//去孩子节点
+	dfs_WPL(root->left, depth+1);
+
+	dfs_WPL(root->right, depth+1);
+
+}
+
+void test_WPL() {
+
+	TreeNode* root = new TreeNode(1, nullptr, nullptr);
+	WPL = 0;
+	dfs_WPL(root, 0);
+	cout << "WPL:" << WPL << endl << endl;
+
+}
+
+void test1_WPL() {
+	TreeNode* llt = new TreeNode(4);
+	TreeNode* lrt = new TreeNode(5);
+	TreeNode* lt = new TreeNode(2, llt, lrt);
+
+	TreeNode* root = new TreeNode(1, lt);
+	WPL = 0;
+	dfs_WPL(root, 0);
+	cout << "WPL:" << WPL << endl << endl;
+}
+
+void test2_WPL() {
+	TreeNode* llt = new TreeNode(4);
+	TreeNode* lrt = new TreeNode(5);
+	TreeNode* lt = new TreeNode(2, llt, lrt);
+
+	TreeNode* rlt = new TreeNode(6);
+	TreeNode* rrt = new TreeNode(7);
+	TreeNode* rt = new TreeNode(3, rlt, rrt);
+
+	TreeNode* root = new TreeNode(1, lt, rt);
+	WPL = 0;
+	dfs_WPL(root, 0);
+	cout << "WPL:" << WPL << endl << endl;
+}
+
+void test3_WPL() {
+
+	TreeNode* llt = new TreeNode(4, new TreeNode(8));
+	TreeNode* lrt = new TreeNode(5);
+	TreeNode* lt = new TreeNode(2, llt, lrt);
+
+	TreeNode* rlt = new TreeNode(6);
+	TreeNode* rrt = new TreeNode(7);
+	TreeNode* rt = new TreeNode(3, rlt, rrt);
+
+	TreeNode* root = new TreeNode(1, lt, rt);
+	WPL = 0;
+	dfs_WPL(root, 0);
+	cout << "WPL:" << WPL << endl << endl;
+}
+
+
+// 当前以root为头节点的子树 
+// 来到当前节点 上层路径累加和为curSum
+int Sum = 0;
+int dfs(TreeNode* root,int preSum ) {
+	if (root == nullptr) {
+		return 0;
+	}
+	//叶子节点收集答案
+	if (root->left == nullptr && root->right == nullptr) {
+		Sum += preSum + root->weight;
+		cout << "preSum: "<<preSum+root->weight << " curSum: " << Sum << endl;
+	}
+	//去孩子节点
+	dfs(root->left, preSum + root->weight);
+
+	dfs(root->right, preSum + root->weight);
+	// 值传递无需操作
+}
+
+void test() {
+
+	TreeNode* root = new TreeNode(1, nullptr, nullptr);
+	Sum = 0;
+	dfs(root, 0);
+	cout << "Sum:" << Sum << endl << endl;
+
+}
+
+void test1() {
+	TreeNode* llt = new TreeNode(4);
+	TreeNode* lrt = new TreeNode(5);
+	TreeNode* lt = new TreeNode(2, llt, lrt);
+
+	TreeNode* root = new TreeNode(1, lt);
+	Sum = 0;
+	dfs(root, 0);
+	cout << "Sum:" << Sum << endl << endl;
+}
+
+void test2() {
+	TreeNode* llt = new TreeNode(4);
+	TreeNode* lrt = new TreeNode(5);
+	TreeNode* lt = new TreeNode(2, llt, lrt);
+
+	TreeNode* rlt = new TreeNode(6);
+	TreeNode* rrt = new TreeNode(7);
+	TreeNode* rt = new TreeNode(3, rlt, rrt);
+
+	TreeNode* root = new TreeNode(1, lt, rt);
+	Sum = 0;
+	dfs(root, 0);
+	cout << "Sum:" << Sum << endl<<endl;
+}
+
+void test3() {
+
+	TreeNode* llt = new TreeNode(4, new TreeNode(8));
+	TreeNode* lrt = new TreeNode(5);
+	TreeNode* lt = new TreeNode(2, llt, lrt);
+
+	TreeNode* rlt = new TreeNode(6);
+	TreeNode* rrt = new TreeNode(7);
+	TreeNode* rt = new TreeNode(3, rlt, rrt);
+
+	TreeNode* root = new TreeNode(1, lt, rt);
+	Sum = 0;
+	dfs(root, 0);
+	cout << "Sum:" << Sum << endl<<endl;
+}
+
 int main() {
 	string str = "aaaabbbcccddeefg";
 	HuffmanTree htree;
@@ -237,6 +400,15 @@ int main() {
 	//string encode = htree.encode(str);
 	//cout << "encode:" << htree.encode(str) << endl;
 	//cout << "decode:" << htree.decode(encode) << endl;
-	return 0;
+
+	cout << endl << endl;
+	test();
+	test1();
+	test2();
+	test3();
+
+	test_WPL();
+	test1_WPL();
+	test2_WPL();
+	test3_WPL();
 }
-#endif
