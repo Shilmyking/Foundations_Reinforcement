@@ -113,6 +113,7 @@ public:
 			}
 		}
 	}
+
 	//创建哈夫曼树（给定所有字符 ---转换为其他符号传输）
 	void createstring(const string& str) {
 		unordered_map<char, uint>dataMap;//词频
@@ -136,7 +137,7 @@ public:
 		}
 		root = minHeap.top();//最后一个就是root
 		getHuffmanCode();//填好 codeMap
-	}
+	}// n logn 
 
 	//输入 char + 词频进行建树
 	void creatchar(int n) {
@@ -210,6 +211,7 @@ public:
 
 		return decodeString;
 	}
+
 private:
 	void getHuffmanCode() {
 		getHuffmanCode(root, "");//统计所有叶节点的 编码值  填好codeMap表
@@ -392,23 +394,23 @@ void test3() {
 	cout << "Sum:" << Sum << endl<<endl;
 }
 
-int main() {
-	string str = "aaaabbbcccddeefg";
-	HuffmanTree htree;
-	htree.createstring(str);
-	htree.showHuffmanTree();
-	//string encode = htree.encode(str);
-	//cout << "encode:" << htree.encode(str) << endl;
-	//cout << "decode:" << htree.decode(encode) << endl;
-
-	cout << endl << endl;
-	test();
-	test1();
-	test2();
-	test3();
-
-	test_WPL();
-	test1_WPL();
-	test2_WPL();
-	test3_WPL();
-}
+//int main() {
+//	string str = "aaaabbbcccddeefg";
+//	HuffmanTree htree;
+//	htree.createstring(str);
+//	htree.showHuffmanTree();
+//	//string encode = htree.encode(str);
+//	//cout << "encode:" << htree.encode(str) << endl;
+//	//cout << "decode:" << htree.decode(encode) << endl;
+//
+//	cout << endl << endl;
+//	test();
+//	test1();
+//	test2();
+//	test3();
+//
+//	test_WPL();
+//	test1_WPL();
+//	test2_WPL();
+//	test3_WPL();
+//}

@@ -33,6 +33,37 @@ public:
 	}
 
 	void insertTail(int val) {
+		Node* newNode = new Node(val);
+		newNode->pre = head->pre;
+		newNode->next = head;
 
+		head->pre->next = newNode;//尾部指向 
+		head->pre = newNode;
+
+		head = newNode;
+	}
+
+	void remove(int val) {
+		Node* cur = head;
+		while (cur != nullptr) {
+			if (cur->data == val) {//删除 cur
+				cur->pre->next = cur->next;
+				cur->next->pre = cur->pre;
+				delete cur;
+				break;
+			}
+			cur = cur->next;
+		}
+	}
+
+	bool find(int val) {
+		Node* cur = head;
+		while (cur != nullptr) {
+			if (cur->data == val) {
+				return true;
+			}
+			cur = cur->next;
+		}
+		return false;
 	}
 };
