@@ -38,3 +38,11 @@
 //int front() {
 //	return Queue[Left];
 //}
+
+class Queue {
+	struct Node {
+		Node* next;
+		int data;
+		Node(Node*next=nullptr,int data=-1):next(next),data(data){}
+	};
+};
